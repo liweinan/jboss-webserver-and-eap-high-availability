@@ -1,7 +1,7 @@
 # Thoughts on JBoss Web Server
 
 
-JBoss Webserver is a product produced by Red Hat: 
+JBoss Web Server is a product produced by Red Hat: 
 
 https://www.redhat.com/en/technologies/jboss-middleware/web-server
 

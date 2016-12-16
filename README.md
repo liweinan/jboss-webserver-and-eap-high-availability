@@ -5,7 +5,7 @@ JBoss Web Server is a product produced by Red Hat:
 
 https://www.redhat.com/en/technologies/jboss-middleware/web-server
 
-The product is comprised of fully open-source projects coming from Apache and JBoss community to prodive a "lightweight" solution on web server markets, such as: Apache Tomcat, HTTPD, mod\_cluster, openssl, etc.
+The product is comprised of fully open-source projects coming from Apache and JBoss community to prodive a _lightweight_ solution on web server markets, such as: Apache Tomcat, HTTPD, mod\_cluster, openssl, etc.
 
 And I'd like to share my thoughts and usages of this product while I'm working on it. For example, I'll introduce the usages of Tomcat, HTTPD, openssl and mod\_clusters and how they interactive with each other.
 

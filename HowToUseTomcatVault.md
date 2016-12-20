@@ -12,7 +12,7 @@ As we can see above, the password is stored as plaintext and it's a security ris
 
 Tomcat Vault is created to solve this problem, it will encrypt your password and store it in standard Java keystore, and let tomcat access the password in a safe way. In this article, I'd like to show you how to use it with Tomcat.
 
-## Preparations
+## Installation of Apache Tomcat and Tomcat-Vault
 
 First we need to have [Apache Tomcat](http://tomcat.apache.org/) and [Tomcat-Vault](https://github.com/picketbox/tomcat-vault) installed on our machine.
 
@@ -62,4 +62,27 @@ target/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar
 target/tomcat-vault-1.0.8.Final.jar
 ```
 
-We will use these two jars later.
+Next we will can try to play with 'tomcat-vault-1.0.8.Final-jar-with-dependencies.jar' to see if it can work correctly.
+
+First we should make sure that we are in the 'target' directory which contains the generated jar files:
+
+```bash
+tb13:target weli$ pwd
+/Users/weli/projs/tomcat-vault/target
+tb13:target weli$ ls *.jar
+tomcat-vault-1.0.8.Final-jar-with-dependencies.jar tomcat-vault-1.0.8.Final.jar
+```
+
+Because the jar file contains a Main class, so we can invoke it like this:
+
+```bash
+tb13:target weli$ java -classpath tomcat-vault-1.0.8.Final-jar-with-dependencies.jar org.apache.tomcat.vault.VaultTool
+**********************************
+****  JBoss Vault  ***************
+**********************************
+Please enter a Digit::   0: Start Interactive Session  1: Remove Interactive Session  2: Exit
+```
+
+If everything goes fine, you can directly using the _java_ command as shown above to start the _org.apache.tomcat.vault.VaultTool_.
+
+

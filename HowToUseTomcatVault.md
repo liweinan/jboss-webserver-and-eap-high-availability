@@ -10,9 +10,56 @@ For example, here is one line excerpted from "tomcat-users.xml":
 
 As we can see above, the password is stored as plaintext and it's a security risk. Though the configuration in store on server, it's still very dangerous to store password in such way.
 
-Tomcat Vault is created to solve this problem, it will encrypt your password and store it in standard Java keystore, and let tomcat access the password in a safe way.
+Tomcat Vault is created to solve this problem, it will encrypt your password and store it in standard Java keystore, and let tomcat access the password in a safe way. In this article, I'd like to show you how to use it with Tomcat.
 
-In this article, I'd like to show you how to use it with Tomcat.
+## Preparations
 
+First we need to have [Apache Tomcat](http://tomcat.apache.org/) and [Tomcat-Vault](https://github.com/picketbox/tomcat-vault) installed on our machine.
 
+For Tomcat, I am using 8.0.39 for this article.
 
+For Tomcat Vault, I just clone the project from GitHub into my local machine and build it from master branch:
+
+```bash
+git clone https://github.com/picketbox/tomcat-vault.git
+```
+
+And then using Maven to build and install it:
+
+```bash
+tb13:tomcat-vault weli$ pwd
+/Users/weli/projs/tomcat-vault
+tb13:tomcat-vault weli$ mvn install
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Vault extension for Apache Tomcat 1.0.8.Final
+[INFO] ------------------------------------------------------------------------
+[INFO]
+...
+copy dependency file to the correct module directory:
+     [copy] Copying 1 file to /Users/weli/projs/tomcat-vault/modules/system/layers/base/tomcat-vault/main
+[INFO] Executed tasks
+[INFO]
+[INFO] --- maven-install-plugin:2.4:install (default-install) @ tomcat-vault ---
+[INFO] Installing /Users/weli/projs/tomcat-vault/target/tomcat-vault-1.0.8.Final.jar to /Users/weli/.m2/repository/org/apache/tomcat/tomcat-vault/1.0.8.Final/tomcat-vault-1.0.8.Final.jar
+[INFO] Installing /Users/weli/projs/tomcat-vault/pom.xml to /Users/weli/.m2/repository/org/apache/tomcat/tomcat-vault/1.0.8.Final/tomcat-vault-1.0.8.Final.pom
+[INFO] Installing /Users/weli/projs/tomcat-vault/target/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar to /Users/weli/.m2/repository/org/apache/tomcat/tomcat-vault/1.0.8.Final/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2.567 s
+[INFO] Finished at: 2016-12-20T16:34:53+08:00
+[INFO] Final Memory: 17M/265M
+[INFO] ------------------------------------------------------------------------
+```
+
+After building it, we can get the tomcat-vault jars:
+
+```bash
+tb13:tomcat-vault weli$ ls -1 target/*.jar
+target/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar
+target/tomcat-vault-1.0.8.Final.jar
+```
+
+We will use these two jars later.

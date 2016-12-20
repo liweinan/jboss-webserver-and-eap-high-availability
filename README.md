@@ -14,3 +14,7 @@ I have written a book in before to introduce part of the area:
 https://www.packtpub.com/application-development/jboss-eap6-high-availability
 
 And in future I'd like to keep sharing clustering and SSL related topics here.
+
+## Contents
+
+[How To Use Tomcat Vault](https://github.com/liweinan/thoughts-on-jboss-webserver/blob/master/HowToUseTomcatVault.md)

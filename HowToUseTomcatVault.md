@@ -100,5 +100,22 @@ Till now, the installation step is finished, and next we can start to integrate 
 ## Generating Java Keystore for Tomcat Vault
 
 
+Tomcat Vault relies on Java Keystore to store the passwords, so the first step is to use _keytool_ command provided by JDK to generate a keystore.
+
+Here is the command to generate keystore:
+
+```bash
+tb13:conf weli$ keytool -genseckey -keystore vault.keystore -alias my_vault -storetype jceks -keyalg AES -keysize 128 -storepass my_password123 -keypass my_password123 -validity 730
+```
+
+As the command shown above, we have generated a keystore named _vault.keystore_, and set the password of the store to _my\_password123_. We also set the password of the generated key pair to _my\_password123_.
 
 
+Please note that I have put the above generated keystore file to _conf_ directory of Tomcat:
+
+```bash
+tb13:conf weli$ pwd
+/Users/weli/projs/apache-tomcat-8.0.39/conf
+tb13:conf weli$ ls vault.keystore
+vault.keystore
+```

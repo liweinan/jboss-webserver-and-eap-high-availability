@@ -85,4 +85,20 @@ Please enter a Digit::   0: Start Interactive Session  1: Remove Interactive Ses
 
 If everything goes fine, you can directly using the _java_ command as shown above to start the _org.apache.tomcat.vault.VaultTool_.
 
+The next step is to put tomcat-vault jar into our local Apache Tomcat directory:
+
+```bash
+tb13:lib weli$ pwd
+/Users/weli/projs/apache-tomcat-8.0.39/lib
+tb13:lib weli$ cp ~/projs/tomcat-vault/target/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar .
+```
+
+As the command shown above, we have the tomcat-vault jar with dependecies copied into tomcat lib directory.
+
+Till now, the installation step is finished, and next we can start to integrate tomcat-vault with tomcat.
+
+## Generating Java Keystore for Tomcat Vault
+
+
+
 

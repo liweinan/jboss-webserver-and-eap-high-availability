@@ -108,7 +108,7 @@ Here is the command to generate keystore:
 tb13:conf weli$ keytool -genseckey -keystore vault.keystore -alias my_vault -storetype jceks -keyalg AES -keysize 128 -storepass my_password123 -keypass my_password123 -validity 730
 ```
 
-As the command shown above, we have generated a keystore named _vault.keystore_, and set the password of the store to _my\_password123_. We also set the password of the generated key pair to _my\_password123_.
+As the command shown above, we have generated a keystore named _vault.keystore_, and set the password of the store to _my\_password123_. We also generate a key pair with the _alias_ name _my\_vault_, and set the password of this generated key pair to _my\_password123_ (You should use different password for key store and key pair in production environment).
 
 
 Please note that I have put the above generated keystore file to _conf_ directory of Tomcat:
@@ -119,3 +119,27 @@ tb13:conf weli$ pwd
 tb13:conf weli$ ls vault.keystore
 vault.keystore
 ```
+
+In production environment, you should put the keystore into a safer place and set the permission of the file properly.
+
+Now we can check this keystore by using the _keytool_ command:
+
+```bash
+tb13:conf weli$ keytool -list -v -keystore vault.keystore -storetype jceks -storepass my_password123
+
+Keystore type: JCEKS
+Keystore provider: SunJCE
+
+Your keystore contains 1 entry
+
+Alias name: my_vault
+Creation date: Dec 20, 2016
+Entry type: SecretKeyEntry
+
+
+*******************************************
+*******************************************
+```
+
+As the command output shown above, we can see our keystore contains one _SecretKeyEntry_ named _my\_vault_.
+

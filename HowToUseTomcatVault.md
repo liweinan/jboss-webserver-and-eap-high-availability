@@ -99,7 +99,6 @@ Till now, the installation step is finished, and next we can start to integrate 
 
 ## Generating Java Keystore for Tomcat Vault
 
-
 Tomcat Vault relies on Java Keystore to store the passwords, so the first step is to use _keytool_ command provided by JDK to generate a keystore.
 
 Here is the command to generate keystore:
@@ -142,4 +141,61 @@ Entry type: SecretKeyEntry
 ```
 
 As the command output shown above, we can see our keystore contains one _SecretKeyEntry_ named _my\_vault_.
+
+Till now, we have generated the keystore for tomcat vault to use. The next step is to invoke tomcat vault to initialize the keystore for us.
+
+## Invoking Tomcat Vault
+
+Now we can invoke tomcat vault to initialize the keystore so it can be used to store tomcat username and password information.
+
+First we need to go to the _lib_ directory of tomcat, because in previous steps we have put tomcat-vault jar into it:
+
+```bash
+tb13:lib weli$ pwd
+/Users/weli/projs/apache-tomcat-8.0.39/lib
+tb13:lib weli$ ls tomcat-vault*
+tomcat-vault-1.0.8.Final-jar-with-dependencies.jar
+```
+
+We need to invoke the above tomcat-vault jar to initialize the keystore we generated in previous step, which is named _vault.keystore_. Here is the whole step to use tomcat-vault to initialize the keystore:
+
+```bash
+tb13:lib weli$ java -classpath tomcat-vault-1.0.8.Final-jar-with-dependencies.jar org.apache.tomcat.vault.VaultTool
+**********************************
+****  JBoss Vault  ***************
+**********************************
+Please enter a Digit::   0: Start Interactive Session  1: Remove Interactive Session  2: Exit
+0
+Starting an interactive session
+Enter directory to store encrypted files:/Users/weli/projs/apache-tomcat-8.0.39/conf
+Enter Keystore URL:/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore
+Enter Keystore password:
+Enter Keystore password again:
+Values match
+Enter 8 character salt:1234abcd
+Enter iteration count as a number (Eg: 44):120
+Enter Keystore Alias:my_vault
+Initializing Vault
+Dec 21, 2016 3:43:33 PM org.apache.tomcat.vault.security.vault.PicketBoxSecurityVault init
+INFO: PBOX000361: Default Security Vault Implementation Initialized and Ready
+Vault Configuration in tomcat properties file:
+********************************************
+...
+KEYSTORE_URL=/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore
+KEYSTORE_PASSWORD=MASK-3CuP21KMHn7G6iH/A3YpM/
+KEYSTORE_ALIAS=my_vault
+SALT=1234abcd
+ITERATION_COUNT=120
+ENC_FILE_DIR=/Users/weli/projs/apache-tomcat-8.0.39/conf/
+...
+********************************************
+Vault is initialized and ready for use
+Handshake with Vault complete
+Please enter a Digit::   0: Store a secured attribute  1: Check whether a secured attribute exists  2: Exit
+2
+```
+
+
+
+
 

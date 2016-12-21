@@ -195,6 +195,35 @@ Please enter a Digit::   0: Store a secured attribute  1: Check whether a secure
 2
 ```
 
+Above is the whole step to use tomcat-vault to initialize the keystore. Let's see the above process step by step. Here is the explanation:
+
+```bash
+Please enter a Digit::   0: Start Interactive Session  1: Remove Interactive Session  2: Exit
+0
+Starting an interactive session
+```
+
+We choose _0_ to start an interactive session to initialize keystore with tomcat-vault.
+
+```bash
+Enter directory to store encrypted files:/Users/weli/projs/apache-tomcat-8.0.39/conf
+```
+
+We have assigned a directory to store tomcat-vault encrypted data file. The data file is used to store username and password information, and it's encrypted by the key pair in the key store.
+
+We will configure tomcat-vault to use _vault.keystore_, and we will also configure tomcat-vault to use the key pair _my\_vault_ in _vault.keystore_ for encryption in following steps.
+
+Let go on seeing the configuration process:
+
+```bash
+Enter Keystore URL:/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore
+Enter Keystore password:
+Enter Keystore password again:
+Values match
+```
+
+
+
 
 
 

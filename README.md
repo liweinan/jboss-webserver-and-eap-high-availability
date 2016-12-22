@@ -1,6 +1,5 @@
 # Thoughts on JBoss Web Server
 
-
 JBoss Web Server is a product produced by Red Hat: 
 
 https://www.redhat.com/en/technologies/jboss-middleware/web-server
@@ -15,6 +14,4 @@ https://www.packtpub.com/application-development/jboss-eap6-high-availability
 
 And in future I'd like to keep sharing clustering and SSL related topics here.
 
-## Contents
-
-[How To Use Tomcat Vault](https://github.com/liweinan/thoughts-on-jboss-webserver/blob/master/HowToUseTomcatVault.md)
+PDF: https://github.com/liweinan/thoughts-on-jboss-webserver/blob/master/ThoughtsOnJBossWebServer.pdf

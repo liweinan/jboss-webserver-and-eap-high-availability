@@ -245,6 +245,28 @@ ITERATION_COUNT=120
 ENC_FILE_DIR=/Users/weli/projs/apache-tomcat-8.0.39/conf/
 ```
 
+We need to store above config into a file. In this article, I put above config into a file named _vault.properties_ and put it into _conf_ directory of tomcat:
+
+```bash
+tb13:conf weli$ pwd
+/Users/weli/projs/apache-tomcat-8.0.39/conf
+```
+
+```bash
+tb13:conf weli$ ls vault.properties
+vault.properties
+```
+
+```bash
+tb13:conf weli$ cat vault.properties
+KEYSTORE_URL=/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore
+KEYSTORE_PASSWORD=MASK-3CuP21KMHn7G6iH/A3YpM/
+KEYSTORE_ALIAS=my_vault
+SALT=1234abcd
+ITERATION_COUNT=120
+ENC_FILE_DIR=/Users/weli/projs/apache-tomcat-8.0.39/conf/
+```
+
 From the above _ENC\_FILE\_DIR_ setting, we can see the place where tomcat-vault put its data file in, and we can verify it:
 
 ```bash
@@ -254,9 +276,21 @@ tb13:conf weli$ ls VAULT.dat
 VAULT.dat
 ```
 
-As the command output shown above, we can see the default name of the data file used by tomcat-vault is _VAULT.dat_. In production environment, you should put this file into a safer place.
+As the command output shown above, we can see the default name of the data file used by tomcat-vault is _VAULT.dat_.
+
+Till now, we have three files generated into _conf_ directory:
+
+```bash
+tb13:conf weli$ find . | grep -i vault
+./VAULT.dat
+./vault.keystore
+./vault.properties
+```
+
+In production environment, you should put above files into a safer place.
 
 Now we have finished initializing tomcat vault, the next step is to configure the tomcat to use the vault.
 
 ## Configuring Tomcat To Use Vault
+
 

@@ -1,22 +1,31 @@
-# Thoughts on JBoss Web Server
+---
+title: "Thoughts on JBoss Web Server"
+author: Weinan Li
+date: Dec 22, 2016
+output: pdf_document
+---
 
-## Preface
+# Introduction
 
-JBoss Web Server is a product produced by Red Hat: 
+JBoss Web Server is a product produced by Red Hat:
 
 https://www.redhat.com/en/technologies/jboss-middleware/web-server
 
-The product is comprised of fully open-source projects coming from Apache and JBoss communities to provide a _lightweight_ solution on establishing web server clusters, such as: Apache Tomcat, HTTPD, mod\_cluster, openssl, etc.
+The product is comprised of fully open-source projects coming from Apache and JBoss co\
+mmunities to provide a _lightweight_ solution on establishing web server clusters, suc\
+h as: Apache Tomcat, HTTPD, mod\_cluster, openssl, etc.
 
-And I'd like to share my thoughts on this product while I'm working on it. For example, I'll introduce the usages of Tomcat, HTTPD, openssl and mod\_clusters and how they interactive with each other.
+And I'd like to share my thoughts on this product while I'm working on it. For example\
+, I'll introduce the usages of Tomcat, HTTPD, openssl and mod\_clusters and how they i\
+nteractive with each other.
 
-I have written a book in before to introduce part of the area: 
+I have written a book in before to introduce part of the area:
 
 https://www.packtpub.com/application-development/jboss-eap6-high-availability
 
 And in future I'd like to keep sharing clustering and SSL related topics here.
 
-## How To Use Tomcat Vault
+# How To Use Tomcat Vault
 
 Tomcat Vault is a tool that allows you to encrypt the passwords in Apache Tomcat configuration files.
 
@@ -30,7 +39,7 @@ As we can see above, the password is stored as plaintext and it's a security ris
 
 Tomcat Vault is created to solve this problem, it will encrypt your password and store it in standard Java keystore, and let tomcat access the password in a safe way. In this article, I'd like to show you how to use it with Tomcat.
 
-### Installation of Apache Tomcat and Tomcat Vault
+## Installation of Apache Tomcat and Tomcat Vault
 
 First we need to have [Apache Tomcat](http://tomcat.apache.org/) and [Tomcat-Vault](https://github.com/picketbox/tomcat-vault) installed on our machine.
 
@@ -115,7 +124,7 @@ As the command shown above, we have the tomcat-vault jar with dependecies copied
 
 Till now, the installation step is finished, and next we can start to integrate tomcat-vault with tomcat.
 
-### Generating Java Keystore for Tomcat Vault
+## Generating Java Keystore for Tomcat Vault
 
 Tomcat Vault relies on Java Keystore to store the passwords, so the first step is to use _keytool_ command provided by JDK to generate a keystore.
 
@@ -161,7 +170,7 @@ As the command output shown above, we can see our keystore contains one _SecretK
 
 Till now, we have generated the keystore for tomcat vault to use. The next step is to invoke tomcat vault to initialize the keystore for us.
 
-### Initializing Tomcat Vault
+## Initializing Tomcat Vault
 
 Now we can invoke tomcat vault to initialize the keystore so it can be used to store tomcat username and password information.
 
@@ -309,6 +318,6 @@ In production environment, you should put above files into a safer place.
 
 Now we have finished initializing tomcat vault, the next step is to configure the tomcat to use the vault.
 
-### Configuring Tomcat To Use Vault
+## Configuring Tomcat To Use Vault
 
 

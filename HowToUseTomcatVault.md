@@ -12,7 +12,7 @@ As we can see above, the password is stored as plaintext and it's a security ris
 
 Tomcat Vault is created to solve this problem, it will encrypt your password and store it in standard Java keystore, and let tomcat access the password in a safe way. In this article, I'd like to show you how to use it with Tomcat.
 
-## Installation of Apache Tomcat and Tomcat-Vault
+## Installation of Apache Tomcat and Tomcat Vault
 
 First we need to have [Apache Tomcat](http://tomcat.apache.org/) and [Tomcat-Vault](https://github.com/picketbox/tomcat-vault) installed on our machine.
 
@@ -109,7 +109,6 @@ tb13:conf weli$ keytool -genseckey -keystore vault.keystore -alias my_vault -sto
 
 As the command shown above, we have generated a keystore named _vault.keystore_, and set the password of the store to _my\_password123_. We also generate a key pair with the _alias_ name _my\_vault_, and set the password of this generated key pair to _my\_password123_ (You should use different password for key store and key pair in production environment).
 
-
 Please note that I have put the above generated keystore file to _conf_ directory of Tomcat:
 
 ```bash
@@ -144,7 +143,7 @@ As the command output shown above, we can see our keystore contains one _SecretK
 
 Till now, we have generated the keystore for tomcat vault to use. The next step is to invoke tomcat vault to initialize the keystore for us.
 
-## Invoking Tomcat Vault
+## Initializing Tomcat Vault
 
 Now we can invoke tomcat vault to initialize the keystore so it can be used to store tomcat username and password information.
 
@@ -257,13 +256,7 @@ VAULT.dat
 
 As the command output shown above, we can see the default name of the data file used by tomcat-vault is _VAULT.dat_. In production environment, you should put this file into a safer place.
 
+Now we have finished initializing tomcat vault, the next step is to configure the tomcat to use the vault.
 
-
-
-
-
-
-
-
-
+## Configuring Tomcat To Use Vault
 

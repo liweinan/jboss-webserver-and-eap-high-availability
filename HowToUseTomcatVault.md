@@ -217,10 +217,49 @@ Let go on seeing the configuration process:
 
 ```bash
 Enter Keystore URL:/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore
-Enter Keystore password:
-Enter Keystore password again:
+Enter Keystore password: my_password123
+Enter Keystore password again: my_password123
 Values match
 ```
+
+Here we enter the keystore password so tomcat-vault can access it and use the key pair inside for data encryption.
+
+Let's see the next step:
+
+```bash
+Enter 8 character salt:1234abcd
+Enter iteration count as a number (Eg: 44):120
+Enter Keystore Alias:my_vault
+Initializing Vault
+```
+
+Here we need to enter 'salt' and 'iteration count' as we like, these two attributes are used by tomcat-vault to encrypt its data file.
+
+After all above parameters are set, tomcat-vault will finish the initialization process and output the settings:
+
+```bash
+KEYSTORE_URL=/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore
+KEYSTORE_PASSWORD=MASK-3CuP21KMHn7G6iH/A3YpM/
+KEYSTORE_ALIAS=my_vault
+SALT=1234abcd
+ITERATION_COUNT=120
+ENC_FILE_DIR=/Users/weli/projs/apache-tomcat-8.0.39/conf/
+```
+
+From the above _ENC\_FILE\_DIR_ setting, we can see the place where tomcat-vault put its data file in, and we can verify it:
+
+```bash
+tb13:conf weli$ pwd
+/Users/weli/projs/apache-tomcat-8.0.39/conf
+tb13:conf weli$ ls VAULT.dat
+VAULT.dat
+```
+
+As the command output shown above, we can see the default name of the data file used by tomcat-vault is _VAULT.dat_. In production environment, you should put this file into a safer place.
+
+
+
+
 
 
 

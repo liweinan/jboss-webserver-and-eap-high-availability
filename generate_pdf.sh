@@ -1,5 +1,5 @@
 #!/bin/sh
 
-fold -sw 75 -s Book.md > wrapped.md
-pandoc --toc --chapters wrapped.md -t latex > ThoughtsOnJBossWebServer.latex
-pandoc --toc --chapters wrapped.md -t latex -o ThoughtsOnJBossWebServer.pdf
+fold -sw 80 Book.md > wrapped.md
+pandoc --toc --top-level-division=chapter wrapped.md -t latex > ThoughtsOnJBossWebServer.latex
+pandoc --toc --top-level-division=chapter wrapped.md -t latex -o ThoughtsOnJBossWebServer.pdf

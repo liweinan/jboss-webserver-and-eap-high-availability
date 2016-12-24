@@ -1,0 +1,435 @@
+\chapter{Introduction}\label{introduction}
+
+JBoss Web Server is a product produced by Red Hat:
+
+https://www.redhat.com/en/technologies/jboss-middleware/web-server
+
+The product is comprised of fully open-source projects coming from
+Apache and JBoss communities to provide a \emph{lightweight} solution on
+establishing web server clusters, such as: Apache Tomcat, HTTPD,
+mod\_cluster, openssl, etc.
+
+And I'd like to share my thoughts on this product while I'm working on
+it. For example, I'll introduce the usages of Tomcat, HTTPD, openssl and
+mod\_clusters and how they interactive with each other.
+
+I have written a book in before to introduce part of the area:
+
+https://www.packtpub.com/application-development/jboss-eap6-high-availability
+
+And in future I'd like to keep sharing clustering and SSL related topics
+here.
+
+\chapter{How To Use Tomcat Vault}\label{how-to-use-tomcat-vault}
+
+Tomcat Vault is a tool that allows you to encrypt the passwords in
+Apache Tomcat configuration files.
+
+For example, here is one line excerpted from ``tomcat-users.xml'':
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{<user}\OtherTok{ username=}\StringTok{"tomcat"}\OtherTok{ password=}\StringTok{"tomcat"}\OtherTok{ roles=}\StringTok{"tomcat"}\KeywordTok{/>}
+\end{Highlighting}
+\end{Shaded}
+
+As we can see above, the password is stored as plaintext and it's a
+security risk. Though the configuration in store on server, it's still
+very dangerous to store password in such way.
+
+Tomcat Vault is created to solve this problem, it will encrypt your
+password and store it in standard Java keystore, and let tomcat access
+the password in a safe way. In this article, I'd like to show you how to
+use it with Tomcat.
+
+\section{Installation of Apache Tomcat and Tomcat
+Vault}\label{installation-of-apache-tomcat-and-tomcat-vault}
+
+First we need to have \href{http://tomcat.apache.org/}{Apache Tomcat}
+and \href{https://github.com/picketbox/tomcat-vault}{Tomcat-Vault}
+installed on our machine.
+
+For Tomcat, I am using 8.0.39 for this article.
+
+For Tomcat Vault, I just clone the project from GitHub into my local
+machine and build it from master branch:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git} \NormalTok{clone https://github.com/picketbox/tomcat-vault.git}
+\end{Highlighting}
+\end{Shaded}
+
+And then using Maven to build and install it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:tomcat-vault weli$ pwd}
+\ExtensionTok{/Users/weli/projs/tomcat-vault}
+\ExtensionTok{tb13}\NormalTok{:tomcat-vault weli$ mvn install}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] Scanning for projects...}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{]}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] ------------------------------------------------------------------------}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] Building Vault extension for Apache Tomcat 1.0.8.Final}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] ------------------------------------------------------------------------}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{]}
+\ExtensionTok{...}
+\ExtensionTok{copy} \NormalTok{dependency file to the correct module directory:}
+     \NormalTok{[}\ExtensionTok{copy}\NormalTok{] Copying 1 file to }
+\ExtensionTok{/Users/weli/projs/tomcat-vault/modules/system/layers/base/tomcat-vault/main}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] Executed tasks}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{]}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] --- maven-install-plugin:2.4:install (default-install) }\ExtensionTok{@} \NormalTok{tomcat-vault ---}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] Installing }
+\ExtensionTok{/Users/weli/projs/tomcat-vault/target/tomcat-vault-1.0.8.Final.jar} \NormalTok{to }
+\ExtensionTok{/Users/weli/.m2/repository/org/apache/tomcat/tomcat-vault/1.0.8.Final/tomcat-vau}
+\ExtensionTok{lt-1.0.8.Final.jar}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] Installing /Users/weli/projs/tomcat-vault/pom.xml to }
+\ExtensionTok{/Users/weli/.m2/repository/org/apache/tomcat/tomcat-vault/1.0.8.Final/tomcat-vau}
+\ExtensionTok{lt-1.0.8.Final.pom}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] Installing }
+\ExtensionTok{/Users/weli/projs/tomcat-vault/target/tomcat-vault-1.0.8.Final-jar-with-dependen}
+\ExtensionTok{cies.jar} \NormalTok{to }
+\ExtensionTok{/Users/weli/.m2/repository/org/apache/tomcat/tomcat-vault/1.0.8.Final/tomcat-vau}
+\ExtensionTok{lt-1.0.8.Final-jar-with-dependencies.jar}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] ------------------------------------------------------------------------}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] BUILD SUCCESS}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] ------------------------------------------------------------------------}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] Total time: 2.567 s}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] Finished at: 2016-12-20T16:34:53+08:00}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] Final Memory: 17M/265M}
+\NormalTok{[}\ExtensionTok{INFO}\NormalTok{] ------------------------------------------------------------------------}
+\end{Highlighting}
+\end{Shaded}
+
+After building it, we can get the tomcat-vault jars:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:tomcat-vault weli$ ls -1 target/*.jar}
+\ExtensionTok{target/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar}
+\ExtensionTok{target/tomcat-vault-1.0.8.Final.jar}
+\end{Highlighting}
+\end{Shaded}
+
+Next we will can try to play with
+`tomcat-vault-1.0.8.Final-jar-with-dependencies.jar' to see if it can
+work correctly.
+
+First we should make sure that we are in the `target' directory which
+contains the generated jar files:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:target weli$ pwd}
+\ExtensionTok{/Users/weli/projs/tomcat-vault/target}
+\ExtensionTok{tb13}\NormalTok{:target weli$ ls *.jar}
+\ExtensionTok{tomcat-vault-1.0.8.Final-jar-with-dependencies.jar} \NormalTok{tomcat-vault-1.0.8.Final.jar}
+\end{Highlighting}
+\end{Shaded}
+
+Because the jar file contains a Main class, so we can invoke it like
+this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:target weli$ java -classpath }
+\ExtensionTok{tomcat-vault-1.0.8.Final-jar-with-dependencies.jar} 
+\ExtensionTok{org.apache.tomcat.vault.VaultTool}
+\ExtensionTok{**********************************}
+\ExtensionTok{****}  \NormalTok{JBoss Vault  ***************}
+\ExtensionTok{**********************************}
+\ExtensionTok{Please} \NormalTok{enter a Digit::   0: Start Interactive Session  1: Remove Interactive }
+\ExtensionTok{Session}  \NormalTok{2: Exit}
+\end{Highlighting}
+\end{Shaded}
+
+If everything goes fine, you can directly using the \emph{java} command
+as shown above to start the \emph{org.apache.tomcat.vault.VaultTool}.
+
+The next step is to put tomcat-vault jar into our local Apache Tomcat
+directory:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:lib weli$ pwd}
+\ExtensionTok{/Users/weli/projs/apache-tomcat-8.0.39/lib}
+\ExtensionTok{tb13}\NormalTok{:lib weli$ cp }
+\ExtensionTok{~/projs/tomcat-vault/target/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar} \NormalTok{.}
+\end{Highlighting}
+\end{Shaded}
+
+As the command shown above, we have the tomcat-vault jar with
+dependecies copied into tomcat lib directory.
+
+Till now, the installation step is finished, and next we can start to
+integrate tomcat-vault with tomcat.
+
+\section{Generating Java Keystore for Tomcat
+Vault}\label{generating-java-keystore-for-tomcat-vault}
+
+Tomcat Vault relies on Java Keystore to store the passwords, so the
+first step is to use \emph{keytool} command provided by JDK to generate
+a keystore.
+
+Here is the command to generate keystore:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:conf weli$ keytool -genseckey -keystore vault.keystore -alias my_vault }
+\ExtensionTok{-storetype} \NormalTok{jceks -keyalg AES -keysize 128 -storepass my_password123 -keypass }
+\ExtensionTok{my_password123} \NormalTok{-validity 730}
+\end{Highlighting}
+\end{Shaded}
+
+As the command shown above, we have generated a keystore named
+\emph{vault.keystore}, and set the password of the store to
+\emph{my\_password123}. We also generate a key pair with the
+\emph{alias} name \emph{my\_vault}, and set the password of this
+generated key pair to \emph{my\_password123} (You should use different
+password for key store and key pair in production environment).
+
+Please note that I have put the above generated keystore file to
+\emph{conf} directory of Tomcat:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:conf weli$ pwd}
+\ExtensionTok{/Users/weli/projs/apache-tomcat-8.0.39/conf}
+\ExtensionTok{tb13}\NormalTok{:conf weli$ ls vault.keystore}
+\ExtensionTok{vault.keystore}
+\end{Highlighting}
+\end{Shaded}
+
+In production environment, you should put the keystore into a safer
+place and set the permission of the file properly.
+
+Now we can check this keystore by using the \emph{keytool} command:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:conf weli$ keytool -list -v -keystore vault.keystore -storetype jceks }
+\ExtensionTok{-storepass} \NormalTok{my_password123}
+
+\ExtensionTok{Keystore} \NormalTok{type: JCEKS}
+\ExtensionTok{Keystore} \NormalTok{provider: SunJCE}
+
+\ExtensionTok{Your} \NormalTok{keystore contains 1 entry}
+
+\ExtensionTok{Alias} \NormalTok{name: my_vault}
+\ExtensionTok{Creation} \NormalTok{date: Dec 20, 2016}
+\ExtensionTok{Entry} \NormalTok{type: SecretKeyEntry}
+
+
+\ExtensionTok{*******************************************}
+\ExtensionTok{*******************************************}
+\end{Highlighting}
+\end{Shaded}
+
+As the command output shown above, we can see our keystore contains one
+\emph{SecretKeyEntry} named \emph{my\_vault}.
+
+Till now, we have generated the keystore for tomcat vault to use. The
+next step is to invoke tomcat vault to initialize the keystore for us.
+
+\section{Initializing Tomcat Vault}\label{initializing-tomcat-vault}
+
+Now we can invoke tomcat vault to initialize the keystore so it can be
+used to store tomcat username and password information.
+
+First we need to go to the \emph{lib} directory of tomcat, because in
+previous steps we have put tomcat-vault jar into it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:lib weli$ pwd}
+\ExtensionTok{/Users/weli/projs/apache-tomcat-8.0.39/lib}
+\ExtensionTok{tb13}\NormalTok{:lib weli$ ls tomcat-vault*}
+\ExtensionTok{tomcat-vault-1.0.8.Final-jar-with-dependencies.jar}
+\end{Highlighting}
+\end{Shaded}
+
+We need to invoke the above tomcat-vault jar to initialize the keystore
+we generated in previous step, which is named \emph{vault.keystore}.
+Here is the whole step to use tomcat-vault to initialize the keystore:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:lib weli$ java -classpath }
+\ExtensionTok{tomcat-vault-1.0.8.Final-jar-with-dependencies.jar} 
+\ExtensionTok{org.apache.tomcat.vault.VaultTool}
+\ExtensionTok{**********************************}
+\ExtensionTok{****}  \NormalTok{JBoss Vault  ***************}
+\ExtensionTok{**********************************}
+\ExtensionTok{Please} \NormalTok{enter a Digit::   0: Start Interactive Session  1: Remove Interactive }
+\ExtensionTok{Session}  \NormalTok{2: Exit}
+\ExtensionTok{0}
+\ExtensionTok{Starting} \NormalTok{an interactive session}
+\ExtensionTok{Enter} \NormalTok{directory to store encrypted }
+\ExtensionTok{files}\NormalTok{:/Users/weli/projs/apache-tomcat-8.0.39/conf}
+\ExtensionTok{Enter} \NormalTok{Keystore URL:/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore}
+\ExtensionTok{Enter} \NormalTok{Keystore password:}
+\ExtensionTok{Enter} \NormalTok{Keystore password again:}
+\ExtensionTok{Values} \NormalTok{match}
+\ExtensionTok{Enter} \NormalTok{8 character salt:1234abcd}
+\ExtensionTok{Enter} \NormalTok{iteration count as a number (Eg: 44):}\ExtensionTok{120}
+\ExtensionTok{Enter} \NormalTok{Keystore Alias:my_vault}
+\ExtensionTok{Initializing} \NormalTok{Vault}
+\ExtensionTok{Dec} \NormalTok{21, 2016 3:43:33 PM }
+\ExtensionTok{org.apache.tomcat.vault.security.vault.PicketBoxSecurityVault} \NormalTok{init}
+\ExtensionTok{INFO}\NormalTok{: PBOX000361: Default Security Vault Implementation Initialized and Ready}
+\ExtensionTok{Vault} \NormalTok{Configuration in tomcat properties file:}
+\ExtensionTok{********************************************}
+\ExtensionTok{...}
+\VariableTok{KEYSTORE_URL=}\NormalTok{/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore}
+\VariableTok{KEYSTORE_PASSWORD=}\NormalTok{MASK-3CuP21KMHn7G6iH/A3YpM/}
+\VariableTok{KEYSTORE_ALIAS=}\NormalTok{my_vault}
+\VariableTok{SALT=}\NormalTok{1234abcd}
+\VariableTok{ITERATION_COUNT=}\NormalTok{120}
+\VariableTok{ENC_FILE_DIR=}\NormalTok{/Users/weli/projs/apache-tomcat-8.0.39/conf/}
+\ExtensionTok{...}
+\ExtensionTok{********************************************}
+\ExtensionTok{Vault} \NormalTok{is initialized and ready for use}
+\ExtensionTok{Handshake} \NormalTok{with Vault complete}
+\ExtensionTok{Please} \NormalTok{enter a Digit::   0: Store a secured attribute  1: Check whether a }
+\ExtensionTok{secured} \NormalTok{attribute exists  2: Exit}
+\ExtensionTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+Above is the whole step to use tomcat-vault to initialize the keystore.
+Let's see the above process step by step. Here is the explanation:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{Please} \NormalTok{enter a Digit::   0: Start Interactive Session  1: Remove Interactive }
+\ExtensionTok{Session}  \NormalTok{2: Exit}
+\ExtensionTok{0}
+\ExtensionTok{Starting} \NormalTok{an interactive session}
+\end{Highlighting}
+\end{Shaded}
+
+We choose \emph{0} to start an interactive session to initialize
+keystore with tomcat-vault.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{Enter} \NormalTok{directory to store encrypted }
+\ExtensionTok{files}\NormalTok{:/Users/weli/projs/apache-tomcat-8.0.39/conf}
+\end{Highlighting}
+\end{Shaded}
+
+We have assigned a directory to store tomcat-vault encrypted data file.
+The data file is used to store username and password information, and
+it's encrypted by the key pair in the key store.
+
+We will configure tomcat-vault to use \emph{vault.keystore}, and we will
+also configure tomcat-vault to use the key pair \emph{my\_vault} in
+\emph{vault.keystore} for encryption in following steps.
+
+Let go on seeing the configuration process:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{Enter} \NormalTok{Keystore URL:/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore}
+\ExtensionTok{Enter} \NormalTok{Keystore password: my_password123}
+\ExtensionTok{Enter} \NormalTok{Keystore password again: my_password123}
+\ExtensionTok{Values} \NormalTok{match}
+\end{Highlighting}
+\end{Shaded}
+
+Here we enter the keystore password so tomcat-vault can access it and
+use the key pair inside for data encryption.
+
+Let's see the next step:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{Enter} \NormalTok{8 character salt:1234abcd}
+\ExtensionTok{Enter} \NormalTok{iteration count as a number (Eg: 44):}\ExtensionTok{120}
+\ExtensionTok{Enter} \NormalTok{Keystore Alias:my_vault}
+\ExtensionTok{Initializing} \NormalTok{Vault}
+\end{Highlighting}
+\end{Shaded}
+
+Here we need to enter `salt' and `iteration count' as we like, these two
+attributes are used by tomcat-vault to encrypt its data file.
+
+After all above parameters are set, tomcat-vault will finish the
+initialization process and output the settings:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\VariableTok{KEYSTORE_URL=}\NormalTok{/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore}
+\VariableTok{KEYSTORE_PASSWORD=}\NormalTok{MASK-3CuP21KMHn7G6iH/A3YpM/}
+\VariableTok{KEYSTORE_ALIAS=}\NormalTok{my_vault}
+\VariableTok{SALT=}\NormalTok{1234abcd}
+\VariableTok{ITERATION_COUNT=}\NormalTok{120}
+\VariableTok{ENC_FILE_DIR=}\NormalTok{/Users/weli/projs/apache-tomcat-8.0.39/conf/}
+\end{Highlighting}
+\end{Shaded}
+
+We need to store above config into a file. In this article, I put above
+config into a file named \emph{vault.properties} and put it into
+\emph{conf} directory of tomcat:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:conf weli$ pwd}
+\ExtensionTok{/Users/weli/projs/apache-tomcat-8.0.39/conf}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:conf weli$ ls vault.properties}
+\ExtensionTok{vault.properties}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:conf weli$ cat vault.properties}
+\VariableTok{KEYSTORE_URL=}\NormalTok{/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore}
+\VariableTok{KEYSTORE_PASSWORD=}\NormalTok{MASK-3CuP21KMHn7G6iH/A3YpM/}
+\VariableTok{KEYSTORE_ALIAS=}\NormalTok{my_vault}
+\VariableTok{SALT=}\NormalTok{1234abcd}
+\VariableTok{ITERATION_COUNT=}\NormalTok{120}
+\VariableTok{ENC_FILE_DIR=}\NormalTok{/Users/weli/projs/apache-tomcat-8.0.39/conf/}
+\end{Highlighting}
+\end{Shaded}
+
+From the above \emph{ENC\_FILE\_DIR} setting, we can see the place where
+tomcat-vault put its data file in, and we can verify it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:conf weli$ pwd}
+\ExtensionTok{/Users/weli/projs/apache-tomcat-8.0.39/conf}
+\ExtensionTok{tb13}\NormalTok{:conf weli$ ls VAULT.dat}
+\ExtensionTok{VAULT.dat}
+\end{Highlighting}
+\end{Shaded}
+
+As the command output shown above, we can see the default name of the
+data file used by tomcat-vault is \emph{VAULT.dat}.
+
+Till now, we have three files generated into \emph{conf} directory:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{tb13}\NormalTok{:conf weli$ find . }\KeywordTok{|} \FunctionTok{grep} \NormalTok{-i vault}
+\ExtensionTok{./VAULT.dat}
+\ExtensionTok{./vault.keystore}
+\ExtensionTok{./vault.properties}
+\end{Highlighting}
+\end{Shaded}
+
+In production environment, you should put above files into a safer
+place.
+
+Now we have finished initializing tomcat vault, the next step is to
+configure the tomcat to use the vault.
+
+\section{Configuring Tomcat To Use
+Vault}\label{configuring-tomcat-to-use-vault}

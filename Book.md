@@ -1,11 +1,18 @@
 ---
-title: "Thoughts on JBoss Web Server"
+title: "阿男的WEB服务器架构指南"
 author: Weinan Li
-date: Dec 22, 2016
 output: pdf_document
+mainfont: "FZBaoSong-Z04S"
+CJKmainfont: "FZBaoSong-Z04S"
+CJKoptions:
+  - BoldFont=FZMeiHei-M07S
+  - ItalicFont=STFangsong
+  - Scale=1.0
 ---
 
-# Introduction
+# 介绍
+
+在这个专栏，阿男想为大家介绍以Apache HTTPD和Apache Tomcat为主的WEB服务器架构方案，特别是会为大家介绍以`mod_cluster`和`mod_jk`为主的负载平衡解决方案。此外阿男还会为大家重点介绍openssl在WEB架构中的相关应用和使用方法。
 
 JBoss Web Server is a product produced by Red Hat:
 

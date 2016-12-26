@@ -1,11 +1,18 @@
 ---
-title: "Thoughts on JBoss Web Server"
+title: "阿男的网络服务器架构指南"
 author: Weinan Li
-date: Dec 22, 2016
 output: pdf_document
+mainfont: "FZBaoSong-Z04S"
+CJKmainfont: "FZBaoSong-Z04S"
+CJKoptions:
+  - BoldFont=FZMeiHei-M07S
+  - ItalicFont=STFangsong
+  - Scale=1.0
 ---
 
-# Introduction
+# 介绍
+
+在这个专栏，
 
 JBoss Web Server is a product produced by Red Hat:
 
@@ -385,4 +392,4 @@ the tomcat to use the vault.
 
 ## Configuring Tomcat To Use Vault
 
-
+As we have prepared tomcat-vault for usage, now we need to configure Tomcat. 

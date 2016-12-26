@@ -20,7 +20,29 @@ CJKoptions:
 
 # Tomcat Vault
 
-Tomcat Vault是为Tomcat做配置文件的数据加密小工具，它的Git仓库在这里[^2]。
+Tomcat Vault是为Tomcat做配置文件的数据加密小工具，它的Git仓库在这里[^2]。阿男在这里为大家介绍它的使用方法。
 
 [^2]: https://github.com/picketbox/tomcat-vault
 
+## Tomcat Vault的设计思路
+
+在Tomcat的用户配置文件里面，用户名和密码都是明文保存的。我们可以看一下`conf`目录中的`tomcat-users.xml`：
+
+```bash
+mini:conf weinanli$ pwd
+/Users/weinanli/projs/apache-tomcat-8.5.9/conf
+mini:conf weinanli$ ls tomcat-users.xml
+tomcat-users.xml
+```
+
+查看这个文件里面的内容：
+
+```xml
+<user username="tomcat" password="foo" roles="tomcat"/>
+```
+
+可以看到password都是明文保存的。为了解决这个问题，我们就要用到tomcat-vault。tomcat-vault使用Java的KeyStore来保存密钥，并使用密钥进行数据的加解密。
+
+因为Java的KeyStore是标准的SSL和JSE规范下的加解密方案，因此避免了自己"发明"一些安全方案而造成的不安全因素。
+
+阿男在接下来的几篇文章里，为大家介绍Tomcat Vault的使用方法。

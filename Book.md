@@ -14,6 +14,11 @@ CJKoptions:
 
 在这个专栏，阿男想为大家介绍以Apache HTTPD和Apache Tomcat为主的WEB服务器架构方案，特别是会为大家介绍以`mod_cluster`和`mod_jk`为主的负载平衡解决方案。此外阿男还会为大家重点介绍openssl在WEB架构中的相关应用和使用方法。
 
+这个专栏会在豆瓣和微博上连载，同时会在GitHub上面形成电子书[^1]。原计划是用全英文写这个专栏，但写道快20页的时候改变想法了，最终决定使用中文来写，慢慢放出。
+
+[^1]: https://github.com/liweinan/thoughts-on-jboss-webserver
+
+
 JBoss Web Server is a product produced by Red Hat:
 
 https://www.redhat.com/en/technologies/jboss-middleware/web-server

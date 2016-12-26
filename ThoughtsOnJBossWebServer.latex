@@ -29,7 +29,7 @@
 }{}
 \usepackage[unicode=true]{hyperref}
 \hypersetup{
-            pdftitle={阿男的网络服务器架构指南},
+            pdftitle={阿男的WEB服务器架构指南},
             pdfauthor={Weinan Li},
             pdfborder={0 0 0},
             breaklinks=true}
@@ -98,7 +98,7 @@
 \makeatother
 
 
-\title{阿男的网络服务器架构指南}
+\title{阿男的WEB服务器架构指南}
 \author{Weinan Li}
 \date{}
 
@@ -111,7 +111,13 @@
 }
 \chapter{介绍}\label{ux4ecbux7ecd}
 
-在这个专栏，
+在这个专栏，阿男想为大家介绍以Apache HTTPD和Apache
+Tomcat为主的WEB服务器架构方案，特别是会为大家介绍以\texttt{mod\_cluster}和\texttt{mod\_jk}为主的
+负载平衡解决方案。此外阿男还会为大家重点介绍openssl在WEB架构中的相关应用和使用方
+法。
+
+这个专栏会在豆瓣和微博上连载，同时会在GitHub上面形成电子书\footnote{https://github.com/liweinan/thoughts-on-jboss-webserver}。原计划是用全英文
+写这个专栏，但最终决定使用中文来写，慢慢放出。
 
 JBoss Web Server is a product produced by Red Hat:
 

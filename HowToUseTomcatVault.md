@@ -62,7 +62,7 @@ target/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar
 target/tomcat-vault-1.0.8.Final.jar
 ```
 
-Next we will can try to play with 'tomcat-vault-1.0.8.Final-jar-with-dependencies.jar' to see if it can work correctly.
+Next we will can try to play with `tomcat-vault-1.0.8.Final-jar-with-dependencies.jar` to see if it can work correctly.
 
 First we should make sure that we are in the 'target' directory which contains the generated jar files:
 
@@ -83,7 +83,7 @@ tb13:target weli$ java -classpath tomcat-vault-1.0.8.Final-jar-with-dependencies
 Please enter a Digit::   0: Start Interactive Session  1: Remove Interactive Session  2: Exit
 ```
 
-If everything goes fine, you can directly using the _java_ command as shown above to start the _org.apache.tomcat.vault.VaultTool_.
+If everything goes fine, you can directly using the `java` command as shown above to start the `org.apache.tomcat.vault.VaultTool`.
 
 The next step is to put tomcat-vault jar into our local Apache Tomcat directory:
 
@@ -99,7 +99,7 @@ Till now, the installation step is finished, and next we can start to integrate 
 
 ## Generating Java Keystore for Tomcat Vault
 
-Tomcat Vault relies on Java Keystore to store the passwords, so the first step is to use _keytool_ command provided by JDK to generate a keystore.
+Tomcat Vault relies on Java Keystore to store the passwords, so the first step is to use `keytool` command provided by JDK to generate a keystore.
 
 Here is the command to generate keystore:
 
@@ -107,9 +107,9 @@ Here is the command to generate keystore:
 tb13:conf weli$ keytool -genseckey -keystore vault.keystore -alias my_vault -storetype jceks -keyalg AES -keysize 128 -storepass my_password123 -keypass my_password123 -validity 730
 ```
 
-As the command shown above, we have generated a keystore named _vault.keystore_, and set the password of the store to _my\_password123_. We also generate a key pair with the _alias_ name _my\_vault_, and set the password of this generated key pair to _my\_password123_ (You should use different password for key store and key pair in production environment).
+As the command shown above, we have generated a keystore named `vault.keystore`, and set the password of the store to `my_password123`. We also generate a key pair with the `alias` name `my_vault`, and set the password of this generated key pair to `my_password123` (You should use different password for key store and key pair in production environment).
 
-Please note that I have put the above generated keystore file to _conf_ directory of Tomcat:
+Please note that I have put the above generated keystore file to `conf` directory of Tomcat:
 
 ```bash
 tb13:conf weli$ pwd
@@ -120,7 +120,7 @@ vault.keystore
 
 In production environment, you should put the keystore into a safer place and set the permission of the file properly.
 
-Now we can check this keystore by using the _keytool_ command:
+Now we can check this keystore by using the `keytool` command:
 
 ```bash
 tb13:conf weli$ keytool -list -v -keystore vault.keystore -storetype jceks -storepass my_password123
@@ -139,7 +139,7 @@ Entry type: SecretKeyEntry
 *******************************************
 ```
 
-As the command output shown above, we can see our keystore contains one _SecretKeyEntry_ named _my\_vault_.
+As the command output shown above, we can see our keystore contains one `SecretKeyEntry` named `my_vault`.
 
 Till now, we have generated the keystore for tomcat vault to use. The next step is to invoke tomcat vault to initialize the keystore for us.
 
@@ -147,7 +147,7 @@ Till now, we have generated the keystore for tomcat vault to use. The next step 
 
 Now we can invoke tomcat vault to initialize the keystore so it can be used to store tomcat username and password information.
 
-First we need to go to the _lib_ directory of tomcat, because in previous steps we have put tomcat-vault jar into it:
+First we need to go to the `lib` directory of tomcat, because in previous steps we have put tomcat-vault jar into it:
 
 ```bash
 tb13:lib weli$ pwd
@@ -156,7 +156,7 @@ tb13:lib weli$ ls tomcat-vault*
 tomcat-vault-1.0.8.Final-jar-with-dependencies.jar
 ```
 
-We need to invoke the above tomcat-vault jar to initialize the keystore we generated in previous step, which is named _vault.keystore_. Here is the whole step to use tomcat-vault to initialize the keystore:
+We need to invoke the above tomcat-vault jar to initialize the keystore we generated in previous step, which is named `vault.keystore`. Here is the whole step to use tomcat-vault to initialize the keystore:
 
 ```bash
 tb13:lib weli$ java -classpath tomcat-vault-1.0.8.Final-jar-with-dependencies.jar org.apache.tomcat.vault.VaultTool
@@ -202,7 +202,7 @@ Please enter a Digit::   0: Start Interactive Session  1: Remove Interactive Ses
 Starting an interactive session
 ```
 
-We choose _0_ to start an interactive session to initialize keystore with tomcat-vault.
+We choose `0` to start an interactive session to initialize keystore with tomcat-vault.
 
 ```bash
 Enter directory to store encrypted files:/Users/weli/projs/apache-tomcat-8.0.39/conf
@@ -210,7 +210,7 @@ Enter directory to store encrypted files:/Users/weli/projs/apache-tomcat-8.0.39/
 
 We have assigned a directory to store tomcat-vault encrypted data file. The data file is used to store username and password information, and it's encrypted by the key pair in the key store.
 
-We will configure tomcat-vault to use _vault.keystore_, and we will also configure tomcat-vault to use the key pair _my\_vault_ in _vault.keystore_ for encryption in following steps.
+We will configure tomcat-vault to use `vault.keystore`, and we will also configure tomcat-vault to use the key pair `my_vault` in `vault.keystore` for encryption in following steps.
 
 Let go on seeing the configuration process:
 
@@ -245,7 +245,7 @@ ITERATION_COUNT=120
 ENC_FILE_DIR=/Users/weli/projs/apache-tomcat-8.0.39/conf/
 ```
 
-We need to store above config into a file. In this article, I put above config into a file named _vault.properties_ and put it into _conf_ directory of tomcat:
+We need to store above config into a file. In this article, I put above config into a file named `vault.properties` and put it into `conf` directory of tomcat:
 
 ```bash
 tb13:conf weli$ pwd
@@ -267,7 +267,7 @@ ITERATION_COUNT=120
 ENC_FILE_DIR=/Users/weli/projs/apache-tomcat-8.0.39/conf/
 ```
 
-From the above _ENC\_FILE\_DIR_ setting, we can see the place where tomcat-vault put its data file in, and we can verify it:
+From the above `ENC_FILE_DIR` setting, we can see the place where tomcat-vault put its data file in, and we can verify it:
 
 ```bash
 tb13:conf weli$ pwd
@@ -276,9 +276,9 @@ tb13:conf weli$ ls VAULT.dat
 VAULT.dat
 ```
 
-As the command output shown above, we can see the default name of the data file used by tomcat-vault is _VAULT.dat_.
+As the command output shown above, we can see the default name of the data file used by tomcat-vault is `VAULT.dat`.
 
-Till now, we have three files generated into _conf_ directory:
+Till now, we have three files generated into `conf` directory:
 
 ```bash
 tb13:conf weli$ find . | grep -i vault
@@ -299,7 +299,7 @@ Now we can configure Tomcat to use Tomcat-Vault. For the first step, we need to 
 org.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.vault.util.PropertySourceVault
 ```
 
-The `catalina.properties` is a long file, and you can just put the above configuration at the bottom of the file.
+The `catalina.properties` is a long file, and you can just put the above configuration at the bottom of the file. This will load tomcat-vault into Tomcat during server startup, and it will use `vault.properties` in `conf` directory by default.
 
 Now we will use `tomcat-vault` to generate a manager password for Tomcat. This password will be encrypted by the `SecretKeyEntry` in keystore. We need to find the tomcat-vault jar correctly, and if you follow the steps previously, it should be located in `lib` directory of Tomcat:
 
@@ -325,7 +325,7 @@ org.apache.tomcat.vault.VaultTool \
 
 I'm running the above command under the root of tomcat directory, so I can add `lib/` and `conf/` in the filepath so the `VaultTool` can find keystore file and vault data file correctly.
 
-In addition, please see I have requested to add a `manager_password` into vault data and the value of the password is `P@SSW0#D`.
+In addition, please see I have requested tomcat-vault to add a password named `manager_password` into vault data, and the value of the password is `P@SSW0#D`.
 
 
 Here is the output result of above command:

@@ -14,7 +14,7 @@ Tomcat Vault is created to solve this problem, it will encrypt your password and
 
 ## Installation of Apache Tomcat and Tomcat Vault
 
-First we need to have [Apache Tomcat](http://tomcat.apache.org/) and [Tomcat-Vault](https://github.com/picketbox/tomcat-vault) installed on our machine.
+First we need to have Apache Tomcat[^1] and Tomcat-Vault[^2] installed on our machine.
 
 For Tomcat, I am using 8.0.39 for this article.
 
@@ -357,7 +357,8 @@ ENC_FILE_DIR=conf/
 
 
 
-
+[^1]: http://tomcat.apache.org/
+[^2]: https://github.com/picketbox/tomcat-vault
 
 
 

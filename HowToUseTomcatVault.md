@@ -293,4 +293,71 @@ Now we have finished initializing tomcat vault, the next step is to configure th
 
 ## Configuring Tomcat To Use Vault
 
+Now we can configure Tomcat to use Tomcat-Vault. For the first step, we need to put one line configuration into `conf/catalina.properties`:
+
+```conf
+org.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.vault.util.PropertySourceVault
+```
+
+The `catalina.properties` is a long file, and you can just put the above configuration at the bottom of the file.
+
+Now we will use `tomcat-vault` to generate a manager password for Tomcat. This password will be encrypted by the `SecretKeyEntry` in keystore. We need to find the tomcat-vault jar correctly, and if you follow the steps previously, it should be located in `lib` directory of Tomcat:
+
+```bash
+lib/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar
+```
+
+Now we can use `java` to run the jar to start tomcat-vault command line interface. Here is the command to do so:
+
+```bash
+$ java -classpath lib/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar \
+org.apache.tomcat.vault.VaultTool \
+--keystore conf/vault.keystore \
+--keystore-password my_password123 \
+--alias my_vault \
+--enc-dir conf/ \
+--iteration 120 \
+--salt 1234abcd \
+--vault-block my_block \
+--attribute manager_password \
+--sec-attr P@SSW0#D
+```
+
+I'm running the above command under the root of tomcat directory, so I can add `lib/` and `conf/` in the filepath so the `VaultTool` can find keystore file and vault data file correctly.
+
+In addition, please see I have requested to add a `manager_password` into vault data and the value of the password is `P@SSW0#D`.
+
+
+Here is the output result of above command:
+
+```bash
+Jan 04, 2017 11:52:33 PM org.apache.tomcat.vault.security.vault.PicketBoxSecurityVault init
+INFO: PBOX000361: Default Security Vault Implementation Initialized and Ready
+Secured attribute value has been stored in vault.
+Please make note of the following:
+********************************************
+Vault Block:my_block
+Attribute Name:manager_password
+Shared Key:
+Configuration should be done as follows:
+VAULT::my_block::manager_password::
+********************************************
+Vault Configuration in tomcat properties file:
+********************************************
+...
+KEYSTORE_URL=conf/vault.keystore
+KEYSTORE_PASSWORD=MASK-3CuP21KMHn7G6iH/A3YpM/
+KEYSTORE_ALIAS=my_vault
+SALT=1234abcd
+ITERATION_COUNT=120
+ENC_FILE_DIR=conf/
+...
+********************************************
+```
+
+
+
+
+
+
 

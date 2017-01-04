@@ -327,7 +327,6 @@ I'm running the above command under the root of tomcat directory, so I can add `
 
 In addition, please see I have requested tomcat-vault to add a password named `manager_password` into vault data, and the value of the password is `P@SSW0#D`.
 
-
 Here is the output result of above command:
 
 ```bash

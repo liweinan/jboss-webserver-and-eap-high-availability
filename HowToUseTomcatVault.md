@@ -388,7 +388,7 @@ $ cat catalina.out  | grep -i vault
 05-Jan-2017 22:02:39.410 INFO [main] org.apache.tomcat.vault.security.vault.PicketBoxSecurityVault.init PBOX000361: Default Security Vault Implementation Initialized and Ready
 ```
 
-As the result shown above, we can see tomcat-vault is loaded correctly.
+As the result shown above, we can see tomcat-vault is loaded correctly. The next step to verify that we can use the password stored in `VAULT.dat` for account `manager`.
 
 
 

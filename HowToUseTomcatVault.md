@@ -2,7 +2,7 @@
 
 Tomcat Vault is a tool that allows you to encrypt the passwords in Apache Tomcat configuration files.
 
-For example, here is one line excerpted from "tomcat-users.xml":
+For example, here is one line excerpted from `tomcat-users.xml`:
 
 ```xml
 <user username="tomcat" password="tomcat" roles="tomcat"/>

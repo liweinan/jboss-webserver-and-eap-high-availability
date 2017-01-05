@@ -27,9 +27,9 @@ git clone https://github.com/picketbox/tomcat-vault.git
 And then using Maven to build and install it:
 
 ```bash
-tb13:tomcat-vault weli$ pwd
+$ pwd
 /Users/weli/projs/tomcat-vault
-tb13:tomcat-vault weli$ mvn install
+$ mvn install
 [INFO] Scanning for projects...
 [INFO]
 [INFO] ------------------------------------------------------------------------
@@ -57,7 +57,7 @@ copy dependency file to the correct module directory:
 After building it, we can get the tomcat-vault jars:
 
 ```bash
-tb13:tomcat-vault weli$ ls -1 target/*.jar
+$ ls -1 target/*.jar
 target/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar
 target/tomcat-vault-1.0.8.Final.jar
 ```
@@ -67,16 +67,16 @@ Next we will can try to play with `tomcat-vault-1.0.8.Final-jar-with-dependencie
 First we should make sure that we are in the 'target' directory which contains the generated jar files:
 
 ```bash
-tb13:target weli$ pwd
+$ pwd
 /Users/weli/projs/tomcat-vault/target
-tb13:target weli$ ls *.jar
+$ ls *.jar
 tomcat-vault-1.0.8.Final-jar-with-dependencies.jar tomcat-vault-1.0.8.Final.jar
 ```
 
 Because the jar file contains a Main class, so we can invoke it like this:
 
 ```bash
-tb13:target weli$ java -classpath tomcat-vault-1.0.8.Final-jar-with-dependencies.jar org.apache.tomcat.vault.VaultTool
+$ java -classpath tomcat-vault-1.0.8.Final-jar-with-dependencies.jar org.apache.tomcat.vault.VaultTool
 **********************************
 ****  JBoss Vault  ***************
 **********************************
@@ -88,9 +88,9 @@ If everything goes fine, you can directly using the `java` command as shown abov
 The next step is to put tomcat-vault jar into our local Apache Tomcat directory:
 
 ```bash
-tb13:lib weli$ pwd
+$ pwd
 /Users/weli/projs/apache-tomcat-8.0.39/lib
-tb13:lib weli$ cp ~/projs/tomcat-vault/target/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar .
+$ cp ~/projs/tomcat-vault/target/tomcat-vault-1.0.8.Final-jar-with-dependencies.jar .
 ```
 
 As the command shown above, we have the tomcat-vault jar with dependecies copied into tomcat lib directory.
@@ -104,7 +104,7 @@ Tomcat Vault relies on Java Keystore to store the passwords, so the first step i
 Here is the command to generate keystore:
 
 ```bash
-tb13:conf weli$ keytool -genseckey -keystore vault.keystore -alias my_vault -storetype jceks -keyalg AES -keysize 128 -storepass my_password123 -keypass my_password123 -validity 730
+$ keytool -genseckey -keystore vault.keystore -alias my_vault -storetype jceks -keyalg AES -keysize 128 -storepass my_password123 -keypass my_password123 -validity 730
 ```
 
 As the command shown above, we have generated a keystore named `vault.keystore`, and set the password of the store to `my_password123`. We also generate a key pair with the `alias` name `my_vault`, and set the password of this generated key pair to `my_password123` (You should use different password for key store and key pair in production environment).
@@ -112,9 +112,9 @@ As the command shown above, we have generated a keystore named `vault.keystore`,
 Please note that I have put the above generated keystore file to `conf` directory of Tomcat:
 
 ```bash
-tb13:conf weli$ pwd
+$ pwd
 /Users/weli/projs/apache-tomcat-8.0.39/conf
-tb13:conf weli$ ls vault.keystore
+$ ls vault.keystore
 vault.keystore
 ```
 
@@ -123,7 +123,7 @@ In production environment, you should put the keystore into a safer place and se
 Now we can check this keystore by using the `keytool` command:
 
 ```bash
-tb13:conf weli$ keytool -list -v -keystore vault.keystore -storetype jceks -storepass my_password123
+$ keytool -list -v -keystore vault.keystore -storetype jceks -storepass my_password123
 
 Keystore type: JCEKS
 Keystore provider: SunJCE
@@ -150,16 +150,16 @@ Now we can invoke tomcat vault to initialize the keystore so it can be used to s
 First we need to go to the `lib` directory of tomcat, because in previous steps we have put tomcat-vault jar into it:
 
 ```bash
-tb13:lib weli$ pwd
+$ pwd
 /Users/weli/projs/apache-tomcat-8.0.39/lib
-tb13:lib weli$ ls tomcat-vault*
+$ ls tomcat-vault*
 tomcat-vault-1.0.8.Final-jar-with-dependencies.jar
 ```
 
 We need to invoke the above tomcat-vault jar to initialize the keystore we generated in previous step, which is named `vault.keystore`. Here is the whole step to use tomcat-vault to initialize the keystore:
 
 ```bash
-tb13:lib weli$ java -classpath tomcat-vault-1.0.8.Final-jar-with-dependencies.jar org.apache.tomcat.vault.VaultTool
+$ java -classpath tomcat-vault-1.0.8.Final-jar-with-dependencies.jar org.apache.tomcat.vault.VaultTool
 **********************************
 ****  JBoss Vault  ***************
 **********************************
@@ -248,31 +248,33 @@ ENC_FILE_DIR=/Users/weli/projs/apache-tomcat-8.0.39/conf/
 We need to store above config into a file. In this article, I put above config into a file named `vault.properties` and put it into `conf` directory of tomcat:
 
 ```bash
-tb13:conf weli$ pwd
+$ pwd
 /Users/weli/projs/apache-tomcat-8.0.39/conf
 ```
 
 ```bash
-tb13:conf weli$ ls vault.properties
+$ ls vault.properties
 vault.properties
 ```
 
 ```bash
-tb13:conf weli$ cat vault.properties
-KEYSTORE_URL=/Users/weli/projs/apache-tomcat-8.0.39/conf/vault.keystore
+$ cat vault.properties
+KEYSTORE_URL=../conf/vault.keystore
 KEYSTORE_PASSWORD=MASK-3CuP21KMHn7G6iH/A3YpM/
 KEYSTORE_ALIAS=my_vault
 SALT=1234abcd
 ITERATION_COUNT=120
-ENC_FILE_DIR=/Users/weli/projs/apache-tomcat-8.0.39/conf/
+ENC_FILE_DIR=../conf/
 ```
 
-From the above `ENC_FILE_DIR` setting, we can see the place where tomcat-vault put its data file in, and we can verify it:
+From the above `ENC_FILE_DIR` setting, we can see the place where tomcat-vault put its data file in. Please note that we can use relative path in `KEYSTORE_URL` and `ENC_FILE_DIR` settings. 
+
+Now let's check whether the `VAULT.dat` is in position:
 
 ```bash
-tb13:conf weli$ pwd
+$ pwd
 /Users/weli/projs/apache-tomcat-8.0.39/conf
-tb13:conf weli$ ls VAULT.dat
+$ ls VAULT.dat
 VAULT.dat
 ```
 
@@ -281,7 +283,7 @@ As the command output shown above, we can see the default name of the data file 
 Till now, we have three files generated into `conf` directory:
 
 ```bash
-tb13:conf weli$ find . | grep -i vault
+$ find . | grep -i vault
 ./VAULT.dat
 ./vault.keystore
 ./vault.properties
@@ -368,7 +370,27 @@ Till now, all the configurations are done and we are ready to start the Tomcat s
 
 ## Testing Tomcat-Vault Integration
 
-Now we can start the Tomcat server to test our configuration. Firstly, we need to
+Now we can start the Tomcat server to test our configuration. Firstly, we need to start the server using the script `startup.sh` in `bin`:
+
+```bash
+$ ./startup.sh
+Using CATALINA_BASE:   /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39
+Using CATALINA_HOME:   /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39
+Using CATALINA_TMPDIR: /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/temp
+Using JRE_HOME:        /Library/Java/JavaVirtualMachines/jdk1.8.0_66.jdk/Contents/Home
+Using CLASSPATH:       /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/bin/bootstrap.jar:/Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/bin/tomcat-juli.jar
+Tomcat started.
+```
+From the above log output we can see Tomcat is started, and now let's check whether tomcat-vault is loaded correctly. We can do a `grep` at `catalian.out` in the `log` directory of Tomcat:
+
+```bash
+$ cat catalina.out  | grep -i vault
+05-Jan-2017 22:02:39.410 INFO [main] org.apache.tomcat.vault.security.vault.PicketBoxSecurityVault.init PBOX000361: Default Security Vault Implementation Initialized and Ready
+```
+
+As the result shown above, we can see tomcat-vault is loaded correctly.
+
+
 
 [^1]: http://tomcat.apache.org/
 [^2]: https://github.com/picketbox/tomcat-vault

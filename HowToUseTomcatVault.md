@@ -354,10 +354,21 @@ ENC_FILE_DIR=conf/
 ********************************************
 ```
 
+As the result output shown above, we can now refer to `manager_password` in Tomcat configuration, and it will point to the true password `P@SSW0#D` in `VAULT.dat`. The true password is encrypted by the `SecretKeyEntry` in keystore, and only Tomcat can access it with the masked password `KEYSTORE_PASSWORD` configured in `vault.properties`.
 
+Now let's use the `manager_password` in Tomcat configuration. We can use it as the password of Tomcat user `manager`. The first step is to open `conf/tomcat-users.xml`, and then we can put one line of user data at the bottom of this file:
+
+```xml
+<user username="manager" password="${VAULT::my_block::manager_password::}" roles="manager-gui" />
+``` 
+
+As the configuration shown above, we can see the password of `manager` is no longer plaintext, but a reference to the entry in VAULT.
+
+Till now, all the configurations are done and we are ready to start the Tomcat server for testing.
+
+## Testing Tomcat-Vault Integration
+
+Now we can start the Tomcat server to test our configuration. Firstly, we need to
 
 [^1]: http://tomcat.apache.org/
 [^2]: https://github.com/picketbox/tomcat-vault
-
-
-

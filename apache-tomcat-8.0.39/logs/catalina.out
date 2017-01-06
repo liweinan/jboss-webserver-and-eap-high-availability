@@ -52,3 +52,49 @@
 05-Jan-2017 22:10:31.047 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
 05-Jan-2017 22:10:31.148 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
 05-Jan-2017 22:10:31.149 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
+05-Jan-2017 22:30:04.753 INFO [main] org.apache.tomcat.vault.security.vault.PicketBoxSecurityVault.init PBOX000361: Default Security Vault Implementation Initialized and Ready
+05-Jan-2017 22:30:04.939 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.0.39
+05-Jan-2017 22:30:04.940 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Nov 9 2016 08:48:39 UTC
+05-Jan-2017 22:30:04.940 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.0.39.0
+05-Jan-2017 22:30:04.940 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+05-Jan-2017 22:30:04.940 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.12.2
+05-Jan-2017 22:30:04.940 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+05-Jan-2017 22:30:04.940 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk1.8.0_66.jdk/Contents/Home/jre
+05-Jan-2017 22:30:04.940 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_66-b17
+05-Jan-2017 22:30:04.940 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+05-Jan-2017 22:30:04.940 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39
+05-Jan-2017 22:30:04.940 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39
+05-Jan-2017 22:30:04.941 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/conf/logging.properties
+05-Jan-2017 22:30:04.941 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+05-Jan-2017 22:30:04.941 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+05-Jan-2017 22:30:04.941 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+05-Jan-2017 22:30:04.941 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.endorsed.dirs=/Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/endorsed
+05-Jan-2017 22:30:04.941 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39
+05-Jan-2017 22:30:04.941 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39
+05-Jan-2017 22:30:04.941 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/temp
+05-Jan-2017 22:30:04.941 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /Users/weli/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+05-Jan-2017 22:30:04.978 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+05-Jan-2017 22:30:04.992 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+05-Jan-2017 22:30:04.994 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+05-Jan-2017 22:30:04.995 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+05-Jan-2017 22:30:04.995 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 564 ms
+05-Jan-2017 22:30:05.018 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+05-Jan-2017 22:30:05.018 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.39
+05-Jan-2017 22:30:05.022 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/webapps/docs
+05-Jan-2017 22:30:05.203 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+05-Jan-2017 22:30:05.235 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/webapps/docs has finished in 213 ms
+05-Jan-2017 22:30:05.235 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/webapps/examples
+05-Jan-2017 22:30:05.356 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+05-Jan-2017 22:30:05.379 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/webapps/examples has finished in 144 ms
+05-Jan-2017 22:30:05.379 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/webapps/host-manager
+05-Jan-2017 22:30:05.440 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+05-Jan-2017 22:30:05.442 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/webapps/host-manager has finished in 63 ms
+05-Jan-2017 22:30:05.442 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/webapps/manager
+05-Jan-2017 22:30:05.476 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+05-Jan-2017 22:30:05.477 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/webapps/manager has finished in 35 ms
+05-Jan-2017 22:30:05.477 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/webapps/ROOT
+05-Jan-2017 22:30:05.510 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+05-Jan-2017 22:30:05.511 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory /Users/weli/projs/thoughts-on-jboss-webserver/apache-tomcat-8.0.39/webapps/ROOT has finished in 34 ms
+05-Jan-2017 22:30:05.512 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+05-Jan-2017 22:30:05.516 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8009"]
+05-Jan-2017 22:30:05.516 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 521 ms

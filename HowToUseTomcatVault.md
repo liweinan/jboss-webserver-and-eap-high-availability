@@ -398,12 +398,17 @@ We can access the URL shown above and get the following page:
 
 ![Tomcat Default Page](imgs/vault01.png)
 
+As the image shown above, we can see the default homepage of our Tomcat server. There is a button named `Manager App` at top-right of the page, please click it, and the login window will popup:
 
+![Login Page](imgs/vault02.png)
 
+We can input `manager` in `Name` field, and in `Password` field we can input `P@SSW0#D` as we set before. If tomcat-vault is working, then Tomcat should accept the password, though it's encrypted and stored in `VAULT.dat`. Let's try it:
 
+![Enter username and password](imgs/vault03.png)
 
+The authentication is passed and we entered the manager page:
 
-
+![Manager Page](imgs/vault04.png)
 
 [^1]: http://tomcat.apache.org/
 [^2]: https://github.com/picketbox/tomcat-vault

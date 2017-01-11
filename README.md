@@ -17,5 +17,5 @@ And in future I'd like to keep sharing clustering and SSL related topics here.
 
 ## Contents
 
-[How To Use Tomcat Vault](https://github.com/liweinan/thoughts-on-jboss-webserver/blob/master/HowToUseTomcatVault.md)
-[How To Use Apache Commons Daemon](https://github.com/liweinan/thoughts-on-jboss-webserver/blob/master/HowToUseCommonsDaemon.md)
+- [How To Use Tomcat Vault](https://github.com/liweinan/thoughts-on-jboss-webserver/blob/master/HowToUseTomcatVault.md)
+- [How To Use Apache Commons Daemon](https://github.com/liweinan/thoughts-on-jboss-webserver/blob/master/HowToUseCommonsDaemon.md)

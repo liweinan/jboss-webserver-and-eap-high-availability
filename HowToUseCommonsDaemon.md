@@ -89,4 +89,7 @@ The controller process will start JVM and start your Java application by properl
 
 The started Java application process is called the `controlled process`, it's your Java application that is running. This process is downgraded to normal user privileges by using system capabilities like `setuid` and `setgid` or so.
 
-[^1] https://commons.apache.org/proper/commons-daemon/jsvc.html
+How can `jsvc` start JVM? It uses `JNI` to interact with Java Virtual Machine. The fullname of `JNI` is called `Java Native Interface`[^2], and it is a stanard framework to enables Java code running in a Java Virtual Machine (JVM) to call and be called by native applications. You don't have to understand the details of `jsvc`, but if you are interested in the implementation, you can see the usage of `JNI_CreateJavaVM()` method provided by Java in `jsvc` source code as a start point to learn about `jsvc`. In general, the purpose of the `jsvc` is to manage the lifecycle of your Java application by interacting with `Daemon` interface on Java side, and you get the ability to start/stop your Java application by using standard system signals scheme.
+
+[^1]: https://commons.apache.org/proper/commons-daemon/jsvc.html
+[^2]: https://en.wikipedia.org/wiki/Java_Native_Interface

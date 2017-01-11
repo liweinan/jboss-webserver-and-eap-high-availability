@@ -1,6 +1,6 @@
 # How To Use Apache Commons Daemon
 
-Apache Commons Daemon is a tool provided by Apache community which can help you to manage your Java application(Usually a server) as a standard system daemon.
+Apache Commons Daemon is a tool provided by Apache community which can help you to manage your Java application(usually a server) as a standard system daemon.
 
 The Apache Commons Daemon consists of two parts: One part is written in Java called `commons-daemon`, the other part is called `jsvc` which is written in C.
 
@@ -80,3 +80,13 @@ public interface Daemon
     public void destroy();
 }
 ```
+
+From the above interface we can see there are several methods related with a server cycle you should implement. How does `commons-daemon` uses the above interface to manage your Java application? The answers lies in `jsvc` part. `jsvc` is written in C, and it provides you three processes[^1], which are called the `Launcher Process`, the `Controller Process`, and the `Controlled Process`.
+
+The purpose of the launcher process is very straight-forward, which will launch a child process. The child process will be a Java instance and it's called the `controller process`.
+
+The controller process will start JVM and start your Java application by properly calling the `init` and `start` methods defined in above interface. Then it will wait for standard Linux/UNIX process signals. So afterthen you can send standard Linux/UNIX signals to stop your Java application, and this process will call `stop` and `destroy` methods according to the signal you send to this process.
+
+The started Java application process is called the `controlled process`, it's your Java application that is running. This process is downgraded to normal user privileges by using system capabilities like `setuid` and `setgid` or so.
+
+[^1] https://commons.apache.org/proper/commons-daemon/jsvc.html

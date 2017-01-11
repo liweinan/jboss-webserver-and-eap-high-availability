@@ -4,7 +4,7 @@ Apache Commons Daemon is a tool provided by Apache community which can help you 
 
 The Apache Commons Daemon consists of two parts: One part is written in Java called `commons-daemon`, the other part is called `jsvc` which is written in C.
 
-The `commons-daemon` part gives you some Java interfaces that you should follow to wrap your server program. The most important interface you need to implment is `Daemon.java`:
+The `commons-daemon` part gives you some Java interfaces that you should follow to wrap your server program. The most important interface you need to implement is `Daemon.java`:
 
 ```java
 public interface Daemon

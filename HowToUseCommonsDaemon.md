@@ -83,6 +83,8 @@ public interface Daemon
 
 From the above interface we can see there are several methods related with a server cycle you should implement. How does `commons-daemon` uses the above interface to manage your Java application? The answers lies in `jsvc` part. `jsvc` is written in C, and it provides you three processes[^1], which are called the `Launcher Process`, the `Controller Process`, and the `Controlled Process`.
 
+[^1]: https://commons.apache.org/proper/commons-daemon/jsvc.html
+
 The purpose of the launcher process is very straight-forward, which will launch a child process. The child process will be a Java instance and it's called the `controller process`.
 
 The controller process will start JVM and start your Java application by properly calling the `init` and `start` methods defined in above interface. Then it will wait for standard Linux/UNIX process signals. So afterthen you can send standard Linux/UNIX signals to stop your Java application, and this process will call `stop` and `destroy` methods according to the signal you send to this process.
@@ -91,12 +93,10 @@ The started Java application process is called the `controlled process`, it's yo
 
 How can `jsvc` start JVM? It uses `JNI` to interact with Java Virtual Machine. The fullname of `JNI` is called `Java Native Interface`[^2], and it is a stanard framework to enables Java code running in a Java Virtual Machine (JVM) to call and be called by native applications. You don't have to understand the details of `jsvc`, but if you are interested in the implementation, you can see the usage of `JNI_CreateJavaVM()` method provided by Java in `jsvc` source code as a start point to learn about `jsvc`. In general, the purpose of the `jsvc` is to manage the lifecycle of your Java application by interacting with `Daemon` interface on Java side, and you get the ability to start/stop your Java application by using standard system signals scheme.
 
+[^2]: https://en.wikipedia.org/wiki/Java_Native_Interface
+
+Now let's start to learn how to use `commons-daemon` and `jsvc` to manage the lifecycle of our Java application.
+
 Currently the `systemd` can achieve most parts of  the process control function provided by `jsvc`, but `jsvc` can let the server to bind to privileged port and then drop the root access properly. To see more differences between `systemd` and `jsvc`, you can check this page[^3].
 
-
-
-##
-
-[^1]: https://commons.apache.org/proper/commons-daemon/jsvc.html
-[^2]: https://en.wikipedia.org/wiki/Java_Native_Interface
 [^3]: http://stackoverflow.com/questions/28894008/what-benefit-do-i-get-from-jsvc-over-just-using-systemd

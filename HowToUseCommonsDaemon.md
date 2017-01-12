@@ -93,9 +93,9 @@ How can `jsvc` start JVM? It uses `JNI` to interact with Java Virtual Machine. T
 
 Currently the `systemd` can achieve most parts of  the process control function provided by `jsvc`, but `jsvc` can let the server to bind to privileged port and then drop the root access properly. To see more differences between `systemd` and `jsvc`, you can check this page[^3].
 
-Now let's see the details usages of `jsvc` and `commons-daemon`.
 
-## 
+
+##
 
 [^1]: https://commons.apache.org/proper/commons-daemon/jsvc.html
 [^2]: https://en.wikipedia.org/wiki/Java_Native_Interface

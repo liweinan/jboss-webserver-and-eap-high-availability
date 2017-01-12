@@ -91,5 +91,12 @@ The started Java application process is called the `controlled process`, it's yo
 
 How can `jsvc` start JVM? It uses `JNI` to interact with Java Virtual Machine. The fullname of `JNI` is called `Java Native Interface`[^2], and it is a stanard framework to enables Java code running in a Java Virtual Machine (JVM) to call and be called by native applications. You don't have to understand the details of `jsvc`, but if you are interested in the implementation, you can see the usage of `JNI_CreateJavaVM()` method provided by Java in `jsvc` source code as a start point to learn about `jsvc`. In general, the purpose of the `jsvc` is to manage the lifecycle of your Java application by interacting with `Daemon` interface on Java side, and you get the ability to start/stop your Java application by using standard system signals scheme.
 
+Currently the `systemd` can achieve most parts of  the process control function provided by `jsvc`, but `jsvc` can let the server to bind to privileged port and then drop the root access properly. To see more differences between `systemd` and `jsvc`, you can check this page[^3].
+
+Now let's see the details usages of `jsvc` and `commons-daemon`.
+
+## 
+
 [^1]: https://commons.apache.org/proper/commons-daemon/jsvc.html
 [^2]: https://en.wikipedia.org/wiki/Java_Native_Interface
+[^3]: http://stackoverflow.com/questions/28894008/what-benefit-do-i-get-from-jsvc-over-just-using-systemd

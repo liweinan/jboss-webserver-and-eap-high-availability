@@ -97,6 +97,8 @@ How can `jsvc` start JVM? It uses `JNI` to interact with Java Virtual Machine. T
 
 Now let's start to learn how to use `commons-daemon` and `jsvc` to manage the lifecycle of our Java application. There is an article that roughly describes the steps to integrate your Java application with `commons-daemon`[^3] you can check. In this article I'll provide a more detailed explaination.
 
+## Integrate your Java application with `commons-daemon`
+
 Firstly, write a Java class that implements the `Daemon` interface:
 
 ```java
@@ -129,7 +131,7 @@ public class MyDaemon implements Daemon {
 
 From the above code, we can see the Daemon interfaces defines four methods that controls you application cycle, which are `init`, `start`, `stop` and `destroy`. And `jsvc` will call these methods to start/stop your application properly. So it's your responsibility to implement the above methods properly.
 
-Then we can compile our Java project properly. 
+Then we need to compile our Java project properly.
 
 [^3]: http://stackoverflow.com/questions/7687159/how-to-convert-a-java-program-to-daemon-with-jsvc
 

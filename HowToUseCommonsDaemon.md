@@ -95,8 +95,44 @@ How can `jsvc` start JVM? It uses `JNI` to interact with Java Virtual Machine. T
 
 [^2]: https://en.wikipedia.org/wiki/Java_Native_Interface
 
-Now let's start to learn how to use `commons-daemon` and `jsvc` to manage the lifecycle of our Java application.
+Now let's start to learn how to use `commons-daemon` and `jsvc` to manage the lifecycle of our Java application. There is an article that roughly describes the steps to integrate your Java application with `commons-daemon`[^3] you can check. In this article I'll provide a more detailed explaination.
 
-Currently the `systemd` can achieve most parts of  the process control function provided by `jsvc`, but `jsvc` can let the server to bind to privileged port and then drop the root access properly. To see more differences between `systemd` and `jsvc`, you can check this page[^3].
+Firstly, write a Java class that implements the `Daemon` interface:
 
-[^3]: http://stackoverflow.com/questions/28894008/what-benefit-do-i-get-from-jsvc-over-just-using-systemd
+```java
+import org.apache.commons.daemon.Daemon;
+import org.apache.commons.daemon.DaemonContext;
+
+public class MyDaemon implements Daemon {
+
+    @Override
+    public void init(DaemonContext context) throws Exception {
+        System.out.println("MyDaemon init...");
+    }
+
+    @Override
+    public void start() throws Exception {
+        System.out.println("MyDaemon start...");
+    }
+
+    @Override
+    public void stop() throws Exception {
+        System.out.println("MyDaemon stop...");
+    }
+
+    @Override
+    public void destroy() {
+        System.out.println("MyDaemon destroy...");
+    }
+}
+```
+
+From the above code, we can see the Daemon interfaces defines four methods that controls you application cycle, which are `init`, `start`, `stop` and `destroy`. And `jsvc` will call these methods to start/stop your application properly. So it's your responsibility to implement the above methods properly.
+
+Then we can compile our Java project properly. 
+
+[^3]: http://stackoverflow.com/questions/7687159/how-to-convert-a-java-program-to-daemon-with-jsvc
+
+Currently the `systemd` can achieve most parts of  the process control function provided by `jsvc`, but `jsvc` can let the server to bind to privileged port and then drop the root access properly. To see more differences between `systemd` and `jsvc`, you can check this page[^4].
+
+[^4]: http://stackoverflow.com/questions/28894008/what-benefit-do-i-get-from-jsvc-over-just-using-systemd

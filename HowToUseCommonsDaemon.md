@@ -131,9 +131,13 @@ public class MyDaemon implements Daemon {
 
 From the above code, we can see the Daemon interfaces defines four methods that controls you application cycle, which are `init`, `start`, `stop` and `destroy`. And `jsvc` will call these methods to start/stop your application properly. So it's your responsibility to implement the above methods properly.
 
-Then we need to compile our Java project properly.
+Then we need to compile our Java project properly. I have put above `MyDaemon` into a Gradle project[^4], so you can directly check it out and build a jar from it. You can go to the directory of the project, and then run `./gradlew fatJar`. It will download the `gradle` and build the project for you.
+
+After building it successfully, you can get the jar `build/libs/DaemonDemo-all-1.0.jar`. This jar contains the above `MyDaemon` and `commons-daemon` jar as dependency.
 
 [^3]: http://stackoverflow.com/questions/7687159/how-to-convert-a-java-program-to-daemon-with-jsvc
+
+[^4]: https://github.com/liweinan/jboss-webserver-and-eap-high-availability/tree/master/DaemonDemo
 
 Currently the `systemd` can achieve most parts of  the process control function provided by `jsvc`, but `jsvc` can let the server to bind to privileged port and then drop the root access properly. To see more differences between `systemd` and `jsvc`, you can check this page[^4].
 

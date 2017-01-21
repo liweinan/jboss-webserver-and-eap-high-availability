@@ -371,9 +371,9 @@ As the log shown above, we can see how `jsvc` handles the signal properly and gr
 
 ## What's the difference between `systemd` and `jsvc`
 
-Currently the `systemd` can achieve most parts of  the process control function provided by `jsvc`, but `jsvc` can let the server to bind to privileged port and then drop the root access properly. To see more differences between `systemd` and `jsvc`, you can check this page[^4].
+Currently the `systemd` can achieve most parts of  the process control function provided by `jsvc`, but `jsvc` can let the server to bind to privileged port and then drop the root access properly. To see more differences between `systemd` and `jsvc`, you can check this page[^6].
 
-[^4]: http://stackoverflow.com/questions/28894008/what-benefit-do-i-get-from-jsvc-over-just-using-systemd
+[^6]: http://stackoverflow.com/questions/28894008/what-benefit-do-i-get-from-jsvc-over-just-using-systemd
 
 ## tomcat-jsvc
 

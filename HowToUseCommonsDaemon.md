@@ -326,6 +326,32 @@ create_tmp_file: /tmp/31380.jsvc_up
 
 From above log we can see all the details of the process. We can see `jsvc` tried to find `java` from several predefined locations, and finally it found the `java` provided by Fedora, and it shows how it uses `DaemonLoader` and start our `MyDaemon`.
 
+Now let's analyze the processes created by `jsvc`. As we have learned, `jsvc` itself is a `Launcher Process`, it will start a JVM instance called `Controller Process`, which will interact with launcher to listen to standard system signals. The controller will start our Daemon program as a standalone process as the `Controlled Process`, the controlled process will accept the management of controller, because controller process can control the child(controlled) process by using the implemented `Daemon` interface.
+
+We can use `ps` command to verify this:
+
+```bash
+[weli@localhost projs]$ ps -ef | grep jsvc
+root      2376   316  0 18:12 pts/5    00:00:00 sudo /usr/bin/jsvc -debug -nodetach -cp /home/weli/projs/jboss-webserver-and-eap-high-availability/DaemonDemo/build/libs:/usr/share/java/commons-daemon-1.0.15-redhat-1.jar MyDaemon
+root      2385  2376  0 18:12 pts/5    00:00:00 jsvc.exec -debug -nodetach -cp /home/weli/projs/jboss-webserver-and-eap-high-availability/DaemonDemo/build/libs:/usr/share/java/commons-daemon-1.0.15-redhat-1.jar MyDaemon
+root      2386  2385  0 18:12 pts/5    00:00:00 jsvc.exec -debug -nodetach -cp /home/weli/projs/jboss-webserver-and-eap-high-availability/DaemonDemo/build/libs:/usr/share/java/commons-daemon-1.0.15-redhat-1.jar MyDaemon
+```
+
+From above we can see three processes. The `jsvc` itself is obviously the launcher. For the other to processes, we can refer to `jsvc` debug output to understand it:
+
+```bash
++-------------------------------------------------------
+| Internal options:              4
+|   "-Dcommons.daemon.process.id=2386" (0x00000000)
+|   "-Dcommons.daemon.process.parent=2385" (0x00000000)
+|   "-Dcommons.daemon.version=1.0.15-dev" (0x00000000)
+|   "abort" (0xfc2fc0a0)
++-------------------------------------------------------
+Java VM created successfully
+```
+
+So the parent is the controller, and the other one is the worker.
+
 ## What's the difference between `systemd` and `jsvc`
 
 Currently the `systemd` can achieve most parts of  the process control function provided by `jsvc`, but `jsvc` can let the server to bind to privileged port and then drop the root access properly. To see more differences between `systemd` and `jsvc`, you can check this page[^4].

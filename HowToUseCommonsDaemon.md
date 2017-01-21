@@ -97,6 +97,8 @@ How can `jsvc` start JVM? It uses `JNI` to interact with Java Virtual Machine. T
 
 Now let's start to learn how to use `commons-daemon` and `jsvc` to manage the lifecycle of our Java application. There is an article that roughly describes the steps to integrate your Java application with `commons-daemon`[^3] you can check. In this article I'll provide a more detailed explaination.
 
+[^3]: http://stackoverflow.com/questions/7687159/how-to-convert-a-java-program-to-daemon-with-jsvc
+
 ## Integrate your Java application with `commons-daemon`
 
 Firstly, write a Java class that implements the `Daemon` interface:
@@ -133,12 +135,203 @@ From the above code, we can see the Daemon interfaces defines four methods that 
 
 Then we need to compile our Java project properly. I have put above `MyDaemon` into a Gradle project[^4], so you can directly check it out and build a jar from it. You can go to the directory of the project, and then run `./gradlew fatJar`. It will download the `gradle` and build the project for you.
 
-After building it successfully, you can get the jar `build/libs/DaemonDemo-all-1.0.jar`. This jar contains the above `MyDaemon` and `commons-daemon` jar as dependency.
-
-[^3]: http://stackoverflow.com/questions/7687159/how-to-convert-a-java-program-to-daemon-with-jsvc
-
 [^4]: https://github.com/liweinan/jboss-webserver-and-eap-high-availability/tree/master/DaemonDemo
+
+After building it successfully, you can get the jar `build/libs/DaemonDemo-all-1.0.jar`. This jar contains the above `MyDaemon` class, and `commons-daemon` jar as dependency.
+
+For the next step, we need to install `jsvc` into our system. I use `Fedora Linux`, so I use `dnf` command to install the package provided by default:
+
+```bash
+apache-commons-daemon-jsvc.x86_64 : Java daemon launcher
+```
+
+After installing it, we can see the files provided by above package:
+
+```bash
+$ rpm -ql apache-commons-daemon-jsvc-1.0.15-10.fc23.x86_64
+/usr/bin/jsvc
+/usr/share/doc/apache-commons-daemon-jsvc
+/usr/share/doc/apache-commons-daemon-jsvc/LICENSE.txt
+/usr/share/doc/apache-commons-daemon-jsvc/NOTICE.txt
+/usr/share/man/man1/jsvc.1.gz
+```
+
+As the file list shown above, the core file provided by the package is the binary file  `/usr/bin/jsvc`. We will use this `jsvc` to start our `MyDaemon`.
+
+Before starting `jsvc`, we need to make sure the Java side, `apache-commons-daemon`, is installed. You can download the jar from the Apache commons website directly[^5]. I will use the one provided by Fedora directly:
+
+[^5]: http://commons.apache.org/proper/commons-daemon/download_daemon.cgi
+
+```bash
+apache-commons-daemon.noarch : Defines API to support an alternative invocation mechanism
+```
+
+The above package will provide the commons-daemon jar:
+
+```bash
+[weli@localhost projs]$ rpm -ql apache-commons-daemon-1.0.15-1.redhat_1.ep6.el6.noarch
+/usr/share/java/apache-commons-daemon-1.0.15-redhat-1.jar
+/usr/share/java/apache-commons-daemon.jar
+/usr/share/java/commons-daemon-1.0.15-redhat-1.jar
+/usr/share/java/commons-daemon.jar
+/usr/share/java/jakarta-commons-daemon-1.0.15-redhat-1.jar
+/usr/share/java/jakarta-commons-daemon.jar
+```
+
+Above jars are acutally the same, most of them are symbolic links to the same actual jar file, so referring to anyone is the same.
+
+Now I can use `jsvc` and `commons-daemon.jar` to start our `MyDaemon`. The command is like the following:
+
+```bash
+$ sudo /usr/bin/jsvc \
+-debug \
+-nodetach \
+-cp /home/weli/projs/jboss-webserver-and-eap-high-availability/DaemonDemo/build/libs:/usr/share/java/commons-daemon-1.0.15-redhat-1.jar MyDaemon
+```
+
+As the command shown above, we have used `nodetach` option to make the program a daemon, and we use `cp` option to tell `jsvc` to find our jar and `commons-daemon` jar. Finally we have told `jsvc` our class that implements the `Daemon` interface. Because we have used `debug` option, so the output of above command is very long. Here is the whole output:
+
+```bash
++-- DUMPING PARSED COMMAND LINE ARGUMENTS --------------
+| Detach:          False
+| Show Version:    No
+| Show Help:       No
+| Check Only:      Disabled
+| Stop:            False
+| Wait:            0
+| Run as service:  No
+| Install service: No
+| Remove service:  No
+| JVM Name:        "null"
+| Java Home:       "null"
+| PID File:        "/var/run/jsvc.pid"
+| User Name:       "null"
+| Extra Options:   1
+|   "-Djava.class.path=/home/weli/projs/jboss-webserver-and-eap-high-availability/DaemonDemo/build/libs:/usr/share/java/commons-daemon-1.0.15-redhat-1.jar"
+| Class Invoked:   "MyDaemon"
+| Class Arguments: 0
++-------------------------------------------------------
+Home not specified on command line, using environment
+Home not on command line or in environment, searching
+Attempting to locate Java Home in /usr/java/default
+Path /usr/java/default is not a directory
+Attempting to locate Java Home in /usr/java
+Path /usr/java is not a directory
+Attempting to locate Java Home in /usr/local/java
+Path /usr/local/java is not a directory
+Attempting to locate Java Home in /usr/lib/jvm/default-java
+Path /usr/lib/jvm/default-java is not a directory
+Attempting to locate Java Home in /usr/lib/jvm/java
+Attempting to locate VM configuration file /usr/lib/jvm/java/jre/lib/jvm.cfg
+Attempting to locate VM configuration file /usr/lib/jvm/java/lib/jvm.cfg
+Attempting to locate VM configuration file /usr/lib/jvm/java/jre/lib/amd64/jvm.cfg
+Found VM configuration file at /usr/lib/jvm/java/jre/lib/amd64/jvm.cfg
+Found VM server definition in configuration
+Checking library /usr/lib/jvm/java/jre/lib/amd64/server/libjvm.so
+Found VM client definition in configuration
+Checking library /usr/lib/jvm/java/jre/lib/amd64/client/libjvm.so
+Checking library /usr/lib/jvm/java/lib/amd64/client/libjvm.so
+Cannot locate library for VM client (skipping)
+Java Home located in /usr/lib/jvm/java
++-- DUMPING JAVA HOME STRUCTURE ------------------------
+| Java Home:       "/usr/lib/jvm/java"
+| Java VM Config.: "/usr/lib/jvm/java/jre/lib/amd64/jvm.cfg"
+| Found JVMs:      1
+| JVM Name:        "server"
+|                  "/usr/lib/jvm/java/jre/lib/amd64/server/libjvm.so"
++-------------------------------------------------------
+Using default JVM in /usr/lib/jvm/java/jre/lib/amd64/server/libjvm.so
+Invoking w/ LD_LIBRARY_PATH=/usr/lib/jvm/java/jre/lib/amd64/server:/usr/lib/jvm/java/jre/lib/amd64
++-- DUMPING PARSED COMMAND LINE ARGUMENTS --------------
+| Detach:          False
+| Show Version:    No
+| Show Help:       No
+| Check Only:      Disabled
+| Stop:            False
+| Wait:            0
+| Run as service:  No
+| Install service: No
+| Remove service:  No
+| JVM Name:        "null"
+| Java Home:       "null"
+| PID File:        "/var/run/jsvc.pid"
+| User Name:       "null"
+| Extra Options:   1
+|   "-Djava.class.path=/home/weli/projs/jboss-webserver-and-eap-high-availability/DaemonDemo/build/libs:/usr/share/java/commons-daemon-1.0.15-redhat-1.jar"
+| Class Invoked:   "MyDaemon"
+| Class Arguments: 0
++-------------------------------------------------------
+Home not specified on command line, using environment
+Home not on command line or in environment, searching
+Attempting to locate Java Home in /usr/java/default
+Path /usr/java/default is not a directory
+Attempting to locate Java Home in /usr/java
+Path /usr/java is not a directory
+Attempting to locate Java Home in /usr/local/java
+Path /usr/local/java is not a directory
+Attempting to locate Java Home in /usr/lib/jvm/default-java
+Path /usr/lib/jvm/default-java is not a directory
+Attempting to locate Java Home in /usr/lib/jvm/java
+Attempting to locate VM configuration file /usr/lib/jvm/java/jre/lib/jvm.cfg
+Attempting to locate VM configuration file /usr/lib/jvm/java/lib/jvm.cfg
+Attempting to locate VM configuration file /usr/lib/jvm/java/jre/lib/amd64/jvm.cfg
+Found VM configuration file at /usr/lib/jvm/java/jre/lib/amd64/jvm.cfg
+Found VM server definition in configuration
+Checking library /usr/lib/jvm/java/jre/lib/amd64/server/libjvm.so
+Found VM client definition in configuration
+Checking library /usr/lib/jvm/java/jre/lib/amd64/client/libjvm.so
+Checking library /usr/lib/jvm/java/lib/amd64/client/libjvm.so
+Cannot locate library for VM client (skipping)
+Java Home located in /usr/lib/jvm/java
++-- DUMPING JAVA HOME STRUCTURE ------------------------
+| Java Home:       "/usr/lib/jvm/java"
+| Java VM Config.: "/usr/lib/jvm/java/jre/lib/amd64/jvm.cfg"
+| Found JVMs:      1
+| JVM Name:        "server"
+|                  "/usr/lib/jvm/java/jre/lib/amd64/server/libjvm.so"
++-------------------------------------------------------
+Running w/ LD_LIBRARY_PATH=/usr/lib/jvm/java/jre/lib/amd64/server:/usr/lib/jvm/java/jre/lib/amd64
+redirecting stdout to /dev/null and stderr to /dev/null
+Switching umask back to 022 from 077
+Using default JVM in /usr/lib/jvm/java/jre/lib/amd64/server/libjvm.so
+Attemtping to load library /usr/lib/jvm/java/jre/lib/amd64/server/libjvm.so
+JVM library /usr/lib/jvm/java/jre/lib/amd64/server/libjvm.so loaded
+JVM library entry point found (0x924610A0)
++-- DUMPING JAVA VM CREATION ARGUMENTS -----------------
+| Version:                       0x010004
+| Ignore Unrecognized Arguments: False
+| Extra options:                 1
+|   "-Djava.class.path=/home/weli/projs/jboss-webserver-and-eap-high-availability/DaemonDemo/build/libs:/usr/share/java/commons-daemon-1.0.15-redhat-1.jar" (0x00000000)
++-------------------------------------------------------
+| Internal options:              4
+|   "-Dcommons.daemon.process.id=31380" (0x00000000)
+|   "-Dcommons.daemon.process.parent=31379" (0x00000000)
+|   "-Dcommons.daemon.version=1.0.15-dev" (0x00000000)
+|   "abort" (0xf9b3e0a0)
++-------------------------------------------------------
+Java VM created successfully
+Class org/apache/commons/daemon/support/DaemonLoader found
+Native methods registered
+java_init done
+Daemon loading...
+MyDaemon init...
+Daemon loaded successfully
+java_load done
+MyDaemon start...
+Daemon started successfully
+java_start done
+Waiting for a signal to be delivered
+create_tmp_file: /tmp/31380.jsvc_up
+```
+
+From above log we can see all the details of the process. We can see `jsvc` tried to find `java` from several predefined locations, and finally it found the `java` provided by Fedora, and it shows how it uses `DaemonLoader` and start our `MyDaemon`.
+
+## What's the difference between `systemd` and `jsvc`
 
 Currently the `systemd` can achieve most parts of  the process control function provided by `jsvc`, but `jsvc` can let the server to bind to privileged port and then drop the root access properly. To see more differences between `systemd` and `jsvc`, you can check this page[^4].
 
 [^4]: http://stackoverflow.com/questions/28894008/what-benefit-do-i-get-from-jsvc-over-just-using-systemd
+
+## tomcat-jsvc
+
+...

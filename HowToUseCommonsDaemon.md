@@ -350,7 +350,24 @@ From above we can see three processes. The `jsvc` itself is obviously the launch
 Java VM created successfully
 ```
 
-So the parent is the controller, and the other one is the worker.
+So the parent is the controller, and the other one is the worker. After the `jsvc` is started as a daemon, we can now pressing `CTRL-C` to send a `SIGINT` signal to the process, and we can see the following output:
+
+```bash
+^CCaught SIGINT: Scheduling a shutdown
+remove_tmp_file: /tmp/2386.jsvc_up
+Shutdown or reload requested: exiting
+MyDaemon stop...
+Forwarding signal 2 to process 2386
+Caught SIGINT: Scheduling a shutdown
+Shutdown or reload already scheduled
+Daemon stopped successfully
+MyDaemon destroy...
+Daemon destroyed successfully
+Calling System.exit(0)
+Service shut down
+```
+
+As the log shown above, we can see how `jsvc` handles the signal properly and gracefully shutdown our `MyDaemon`. So it's our responsibility to implement `Daemon` interface correctly, so `jsvc` can use our implementation properly.
 
 ## What's the difference between `systemd` and `jsvc`
 

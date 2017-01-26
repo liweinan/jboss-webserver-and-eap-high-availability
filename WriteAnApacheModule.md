@@ -44,13 +44,13 @@ module AP_MODULE_DECLARE_DATA foo_module = {
 };
 ```
 
-这个模块通过`AP_MODULE_DECLARE_DATA`来注册一个`foo_module`：
+This module will use `AP_MODULE_DECLARE_DATA` to register a `foo_module`：
 
 ```c
-module AP_MODULE_DECLARE_DATA foo_module = {
+module AP_MODULE_DECLARE_DATA foo_module = ...
 ```
 
-并会在运行时通过`foo_hooks`中调用`ap_hook_handler`将我们的逻辑函数`foo_handler`注册进httpd：
+And it will use `foo_hooks` to call `ap_hook_handler`, and `ap_hook_handler` will load our `foo_handler` into `httpd`：
 
 ```c
 static void foo_hooks(apr_pool_t *pool) {
@@ -58,11 +58,11 @@ static void foo_hooks(apr_pool_t *pool) {
 }
 ```
 
-我们的`foo_handler`功能非常简单，并不处理用户请求`request_rec`，只是先判断在`httpd.conf`中模块是否设置为`{foo_handler}`。判断完成后，这个模块会直接返回`HTML`数据：
+Our main function `foo_handler` is very simple. You can see it doesn't deal with `request_rec`. It will just output some HTML data：
 
 ```c
-  ap_set_content_type(r, "text/html");
-  ap_rprintf(r, "Hello, martian!");
+ap_set_content_type(r, "text/html");
+ap_rprintf(r, "Hello, martian!");
 ```
 
-理解了这个module的作用以后，接下来是编译这个module。
+As we have understood the meaning of this simple module, now we can compile it.

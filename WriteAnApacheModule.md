@@ -65,4 +65,45 @@ ap_set_content_type(r, "text/html");
 ap_rprintf(r, "Hello, martian!");
 ```
 
-As we have understood the meaning of this simple module, now we can compile it.
+As we have understood the meaning of this simple module, now we can compile it. `Apache HTTPD` has provided a module compiling and installing tool for us called `apxs`:
+
+![](imgs/httpd_module_02.jpeg)
+
+We can use it to compile our `foo_module`:
+
+![](imgs/httpd_module_03.jpeg)
+
+As the snapshot shown above，we have used `apxs` to compile `foo_module.c`:
+
+```bash
+$ apxs -a -c foo_module.c
+```
+
+The output of compling process is like this:
+
+```bash
+/usr/lib64/apr-1/build/libtool --silent --mode=compile gcc -prefer-pic -O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -m64 -mtune=generic  -DLINUX -D_REENTRANT -D_GNU_SOURCE -pthread -I/usr/include/httpd  -I/usr/include/apr-1   -I/usr/include/apr-1   -c -o foo_module.lo foo_module.c && touch foo_module.slo
+/usr/lib64/apr-1/build/libtool --silent --mode=link gcc -Wl,-z,relro,-z,now   -o foo_module.la  -rpath /usr/lib64/httpd/modules -module -avoid-version    foo_module.lo
+```
+
+As the output shown above, we can see `apxs` used `libtool` to compile our module, and generated many files:
+
+```bash
+$ ls
+foo_module.c  foo_module.la  foo_module.lo  foo_module.o  foo_module.slo
+```
+
+There are also generated files in `.libs` directory：
+
+```bash
+$ ls -l ./.libs/
+total 104
+-rw-rw-r--. 1 weli weli 35580 Jan 27 02:55 foo_module.a
+lrwxrwxrwx. 1 weli weli    16 Jan 27 02:55 foo_module.la -> ../foo_module.la
+-rw-rw-r--. 1 weli weli   938 Jan 27 02:55 foo_module.lai
+-rw-rw-r--. 1 weli weli 35432 Jan 27 02:55 foo_module.o
+-rwxrwxr-x. 1 weli weli 25560 Jan 27 02:55 foo_module.so
+```
+
+
+

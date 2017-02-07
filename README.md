@@ -10,6 +10,7 @@ I'd like to share my thoughts on these two products while I'm working on it. I h
 
 - [How To Use Tomcat Vault](https://github.com/liweinan/thoughts-on-jboss-webserver/blob/master/HowToUseTomcatVault.md)
 - [How To Use Apache Commons Daemon](https://github.com/liweinan/thoughts-on-jboss-webserver/blob/master/HowToUseCommonsDaemon.md)
+- [Write An Apache Module](https://github.com/liweinan/jboss-webserver-and-eap-high-availability/blob/master/WriteAnApacheModule.md)
 
 [^1]: https://www.redhat.com/en/technologies/jboss-middleware/web-server
 [^2]: https://www.packtpub.com/application-development/jboss-eap6-high-availability

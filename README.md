@@ -1,3 +1,4 @@
+# Future work moved to https://liweinan.github.io/
 # JBoss Web Server and EAP High Availability
 
 JBoss Web Server is a product produced by Red Hat[^1]. The product is comprised of fully open-source projects coming from Apache and JBoss communities to provide a `lightweight` solution on establishing web server clusters, such as: `Apache Tomcat`, `HTTPD`, `mod_cluster`, `openssl`, etc.
